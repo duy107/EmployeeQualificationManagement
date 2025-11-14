@@ -1,0 +1,87 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "4.3.6",
+      "isInstalled": true
+    },
+    "Volo.Abp.Account": {
+      "version": "9.3.6",
+      "isInstalled": true,
+      "creationTime": "11/11/2025 08:44:58 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "9.3.6",
+      "isInstalled": true,
+      "creationTime": "11/11/2025 08:44:58 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "9.3.6",
+      "isInstalled": true,
+      "creationTime": "11/11/2025 08:44:58 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "9.3.6",
+      "isInstalled": true,
+      "creationTime": "11/11/2025 08:44:58 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "9.3.6",
+      "isInstalled": true,
+      "creationTime": "11/11/2025 08:44:58 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "9.3.6",
+      "isInstalled": true,
+      "creationTime": "11/11/2025 08:44:58 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "9.3.6",
+      "isInstalled": true,
+      "creationTime": "11/11/2025 08:44:58 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {}
+    }
+  },
+  "packages": {
+    "Gosei.EmployeeQualificationManagement.Application": {
+      "path": "src/Gosei.EmployeeQualificationManagement.Application/Gosei.EmployeeQualificationManagement.Application.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.Domain.Shared": {
+      "path": "src/Gosei.EmployeeQualificationManagement.Domain.Shared/Gosei.EmployeeQualificationManagement.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.Application.Contracts": {
+      "path": "src/Gosei.EmployeeQualificationManagement.Application.Contracts/Gosei.EmployeeQualificationManagement.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.HttpApi": {
+      "path": "src/Gosei.EmployeeQualificationManagement.HttpApi/Gosei.EmployeeQualificationManagement.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.HttpApi.Client": {
+      "path": "src/Gosei.EmployeeQualificationManagement.HttpApi.Client/Gosei.EmployeeQualificationManagement.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.EntityFrameworkCore": {
+      "path": "src/Gosei.EmployeeQualificationManagement.EntityFrameworkCore/Gosei.EmployeeQualificationManagement.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.DbMigrator": {
+      "path": "src/Gosei.EmployeeQualificationManagement.DbMigrator/Gosei.EmployeeQualificationManagement.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.HttpApi.Host": {
+      "path": "src/Gosei.EmployeeQualificationManagement.HttpApi.Host/Gosei.EmployeeQualificationManagement.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "Gosei.EmployeeQualificationManagement.Domain": {
+      "path": "src/Gosei.EmployeeQualificationManagement.Domain/Gosei.EmployeeQualificationManagement.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}
