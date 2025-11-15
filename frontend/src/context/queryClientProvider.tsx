@@ -11,7 +11,7 @@ export default function QueryProvider({ children }: { children: React.ReactNode 
         defaultOptions: {
           queries: {
             // Tắt tự động refetch khi focus vào cửa sổ (có thể gây phiền)
-            refetchOnWindowFocus: false, 
+            refetchOnWindowFocus: true, 
             // Thử lại 1 lần nếu query lỗi
             retry: 1, 
           },

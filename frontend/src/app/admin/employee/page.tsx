@@ -29,7 +29,6 @@ function Employees() {
     });
     const {
         data,
-        refetch,
         isLoading,
         isError,
         error
@@ -66,10 +65,6 @@ function Employees() {
             setTotalItem(0);
         }
     }, [isError, error]);
-
-    const reload = () => {
-        refetch();
-    };
 
     const handleSearchSubmit = () => {
         const currentSearchInput = searchInputRef.current?.value || "";
@@ -231,7 +226,7 @@ function Employees() {
                                                     {employee.email}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                    <DeleteEmployee reload={reload} employeeId={employee.id} />
+                                                    <DeleteEmployee employeeId={employee.id} />
                                                 </td>
                                             </tr>
                                         ))

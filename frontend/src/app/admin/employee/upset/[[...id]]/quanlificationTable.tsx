@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/ui";
 import Pagination from "@/components/ui/pagination";
+import { checkDate, notification } from "@/lib/utils";
 import { getPaginatedEmployeeQualification } from "@/service/admin/employeeQualification.service";
-import { EmployeeQualificationResponse, QualificationPaginatedRequest } from "@/types";
+import { QualificationPaginatedRequest } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import AddQualificationModal from "./addQualification";
-import { checkDate, notification } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 
 
 function QualificationForm({ employeeId }: { employeeId: string }) {
@@ -23,8 +23,6 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
         });
     const {
         data,
-        refetch,
-        isLoading,
         isError,
         error
     } = useQuery({
@@ -44,10 +42,6 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
             setTotalQualification(data?.totalCount || 0);
         }
     }, [data, currentPage]);
-
-    const reload = () => {
-        refetch();
-    }
 
     useEffect(() => {
         if (isError && error) {
@@ -132,7 +126,6 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
                 open={open}
                 onClose={() => setOpen(false)}
                 employeeId={employeeId}
-                reload={reload}
             />}
         </div>
     );

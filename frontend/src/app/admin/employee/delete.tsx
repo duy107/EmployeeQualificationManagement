@@ -1,22 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { notification } from "@/lib/utils";
 import { deleteEmployee } from "@/service/admin/employee.service";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface DeleteEmployeeProps {
     employeeId: string | undefined,
-    reload: () => void
 }
 
-function DeleteEmployee({ employeeId, reload }: DeleteEmployeeProps) {
+function DeleteEmployee({ employeeId }: DeleteEmployeeProps) {
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: async (employeeId: string) => await deleteEmployee(employeeId),
+        onSuccess: (res) => {
+            if (res.status === 204) {
+                notification("Deleted employee successfully", "success");
+                queryClient.invalidateQueries({ queryKey: ['employees'] });
+            }else notification("Try again!");
+        },
+        onError: (error) => {
+            notification((error as Error).message);
+        }
+    }) 
     const handleDelete = async () => {
         if (!confirm("Do you want to delete this employee?"))
             return;
-        const res = await deleteEmployee(employeeId || "");
-        if (res.status === 204) {
-            notification("Deleted employee successfully", "success");
-            reload();
-        } else notification("Try again!");
-
+        mutate(employeeId || "");
     }
     return (
         <>

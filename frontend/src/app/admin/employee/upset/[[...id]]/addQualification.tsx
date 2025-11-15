@@ -16,6 +16,7 @@ import { useQualificationStore } from '@/store/useQualificationStore';
 import {
     EmployeeQualificationRequest
 } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -23,16 +24,25 @@ interface AddQualificationModalProps {
     employeeId: string;
     open: boolean;
     onClose: () => void;
-    reload: () => void
 }
 
 export default function AddQualificationModal({
     employeeId,
     open,
-    onClose,
-    reload
+    onClose
 }: AddQualificationModalProps) {
     const { qualifications, fetchQualifications } = useQualificationStore();
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: async (data: EmployeeQualificationRequest) => await create(data),
+        onSuccess: (data) => {
+            if (data.status === 200) {
+                reset(initForm)
+                onClose();
+                queryClient.invalidateQueries({ queryKey: ['employee-qualification']})
+            } else alert("Error! Try again");
+        }
+    });
     const initForm = {
         employeeId,
         qualificationId: qualifications[0]?.id ?? "",
@@ -56,6 +66,7 @@ export default function AddQualificationModal({
             reset(initForm);
         }
     }, [open, qualifications, employeeId, reset]);
+
     const onSubmit = async (data: EmployeeQualificationRequest) => {
         if (!data.qualificationId || !data.institution?.trim())
             return alert("Please select a qualification and enter an institution name.");
@@ -63,14 +74,7 @@ export default function AddQualificationModal({
         if (!data.validTo?.trim()) delete data.validTo;
         if (!data.city?.trim()) delete data.city;
         data.institution = data.institution?.trim();
-        const res = await create(data);
-        if (res.status === 200) {
-            reload();
-            reset(initForm)
-            onClose();
-        } else {
-            alert("Error! Try again");
-        }
+        mutate(data);
     }
 
     const handleClose = () => {
