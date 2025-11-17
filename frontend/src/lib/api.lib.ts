@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { getSession, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { notification } from "./utils";
 
 const publicEndpoint = ["connect/token"];
 const apiOpenId = ["connect/token"];
@@ -102,6 +103,7 @@ const fetchAPI = async (path: string, options: RequestInit) => {
         };
     }
     const res = await fetch(fullUrl, options);
+
     if (res.status === 401 || res.status === 403) {
         (typeof window !== "undefined") ? signOut({ callbackUrl: "/login" }) : redirect("/login");
     }

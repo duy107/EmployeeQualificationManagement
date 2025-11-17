@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Pagination from "@/components/ui/pagination";
 import { notification } from "@/lib/utils";
-import { getPaginatedEmployee } from "@/service/admin/employee.service";
-import { EmployeePaginatedRequest } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { getById, getPaginatedEmployee } from "@/service/admin/employee.service";
+import { EmployeePaginatedRequest, EmployeeRequest } from "@/types";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Search } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -20,6 +20,7 @@ function Employees() {
     const [totalItem, setTotalItem] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const queryClient = useQueryClient();
     const [search, setSearch] = useState<EmployeePaginatedRequest>({
         search: "",
         pageNumber: currentPage,
@@ -46,7 +47,7 @@ function Employees() {
         if (data) {
             const items = data?.items || [];
             const total = data?.totalCount || 0;
-            
+
             if (items.length === 0 && currentPage > 1) {
                 const prePage = currentPage - 1;
                 setCurrentPage(prePage);
@@ -65,6 +66,25 @@ function Employees() {
             setTotalItem(0);
         }
     }, [isError, error]);
+
+    const handleHover = (employeeId: string) => {
+        queryClient.prefetchQuery({
+            queryKey: ["employee", employeeId],
+            queryFn: async () => {
+                const res = await getById(employeeId);
+                if (res.status === 200) {
+                    const emp = res.data as EmployeeRequest;
+                    const parts = emp.birthDate?.split('/');
+                    if (parts?.length === 3) {
+                        emp.birthDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                    }
+                    return emp;
+                }
+                throw new Error("Failed to prefetch employee");
+            },
+            staleTime: 60 * 1000
+        });
+    };
 
     const handleSearchSubmit = () => {
         const currentSearchInput = searchInputRef.current?.value || "";
@@ -98,8 +118,10 @@ function Employees() {
     }
 
     const handleLogout = async () => {
-        router.push("/login");
+        queryClient.removeQueries();
         await signOut({ redirect: false });
+        router.replace("/login");
+        // await signOut({ callbackUrl: "/login" });
     }
 
     if (isLoading) {
@@ -210,8 +232,11 @@ function Employees() {
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                     {(currentPage - 1) * pageSize + index + 1}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                                                    <Link href={`/admin/employee/upset/${employee.id}`}>{employee.firstName}</Link>
+                                                <td
+                                                    className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                                                    <Link
+                                                        onMouseEnter={() => handleHover(employee.id || "")}
+                                                        href={`/admin/employee/upset/${employee.id}`}>{employee.firstName}</Link>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                     {employee.lastName}

@@ -22,25 +22,27 @@ import { useParams, useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import QualificationForm from './quanlificationTable';
 import { notification } from '@/lib/utils';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export default function UpsetEmployee() {
   const route = useRouter();
   const params = useParams();
   const id = params?.id?.[0];
   const queryClient = useQueryClient();
-  const loadEmployee = async () => {
-    if (!id) {
-      return {
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        birthDate: '',
-        gender: 'Male',
-        note: '',
-      };
-    }
-    try {
+  const { data: employeeData, isLoading: isQueryLoading } = useQuery({
+    queryKey: ["employee", id],
+    queryFn: async () => {
+      if (!id) {
+        return {
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          birthDate: '',
+          gender: 'Male',
+          note: '',
+        };
+      }
       const res = await getById(id);
       if (res.status === 200) {
         const emp = res.data as EmployeeRequest;
@@ -49,20 +51,22 @@ export default function UpsetEmployee() {
           emp.birthDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
         }
         return emp;
-      } else {
-        route.replace('/admin/employee');
-        return {};
       }
-    } catch {
-      route.replace('/admin/employee');
-      return {};
-    }
-  };
+      throw new Error("Failed to fetch employee");
+    },
+    staleTime: 60 * 1000
+  });
 
   const { register, handleSubmit,
-    watch, control,
-    formState: { errors, isLoading }
-  } = useForm<EmployeeRequest>({ defaultValues: loadEmployee });
+    watch, control, reset,
+    formState: { errors }
+  } = useForm<EmployeeRequest>({ defaultValues: employeeData });
+
+  useEffect(() => {
+    if (employeeData) {
+        reset(employeeData);
+    }
+}, [employeeData, reset]);
 
   const onSubmit = async (data: EmployeeRequest) => {
     if (!data.note?.trim()) delete data.note;
@@ -80,7 +84,7 @@ export default function UpsetEmployee() {
     }
   }
 
-  if (isLoading) {
+  if (isQueryLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Loader2 className="w-4 h-4 animate-spin" />  Đang tải...
@@ -147,7 +151,7 @@ export default function UpsetEmployee() {
                   placeholder="LastName"
                   {...register("lastName", {
                     required: "LastName is required!",
-                      maxLength: {
+                    maxLength: {
                       value: 10,
                       message: "LastName maximum 10 characters"
                     },

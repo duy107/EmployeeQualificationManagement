@@ -3,5 +3,6 @@ export type LoginRequest = {
     scope: string,
     grant_type: string,
     username? : string | null,
-    password? : string | null
+    password? : string | null,
+    refresh_token? : string | null
 }

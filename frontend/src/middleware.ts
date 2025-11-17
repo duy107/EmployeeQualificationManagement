@@ -6,15 +6,22 @@ export async function middleware(req: NextRequest) {
         req,
         secret: process.env.NEXTAUTH_SECRET
     });
-    if(req.nextUrl.pathname === "/"){
-        if(!token) return NextResponse.redirect(new URL("/login", req.url))
-        return NextResponse.redirect(new URL("/admin/employee", req.url))
+    const { pathname } = req.nextUrl;
+    const isLoggedIn = !!token;
+
+    if(pathname === "/"){
+        if(!isLoggedIn) return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.redirect(new URL("/admin/employee", req.url));
     }
-    if(!token) 
+    if(pathname === "/login"){
+        if(isLoggedIn) return NextResponse.redirect(new URL("/admin/employee", req.url));
+        return NextResponse.next();
+    }
+    if(!isLoggedIn) 
         return NextResponse.redirect(new URL("/login", req.url));
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/", "/admin/employee", "/admin/employee/upset/:path*"]
+    matcher: ["/", "/admin/employee", "/admin/employee/upset/:path*", "/login"]
 }

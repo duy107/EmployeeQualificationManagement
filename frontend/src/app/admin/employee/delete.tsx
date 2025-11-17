@@ -9,18 +9,18 @@ interface DeleteEmployeeProps {
 
 function DeleteEmployee({ employeeId }: DeleteEmployeeProps) {
     const queryClient = useQueryClient();
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: async (employeeId: string) => await deleteEmployee(employeeId),
         onSuccess: (res) => {
             if (res.status === 204) {
                 notification("Deleted employee successfully", "success");
                 queryClient.invalidateQueries({ queryKey: ['employees'] });
-            }else notification("Try again!");
+            } else notification("Try again!");
         },
         onError: (error) => {
             notification((error as Error).message);
         }
-    }) 
+    })
     const handleDelete = async () => {
         if (!confirm("Do you want to delete this employee?"))
             return;
@@ -29,6 +29,7 @@ function DeleteEmployee({ employeeId }: DeleteEmployeeProps) {
     return (
         <>
             <Button
+                disabled={isPending}
                 onClick={handleDelete}
                 variant="outline"
                 className="text-red-500 border-red-300 hover:bg-red-50 hover:text-red-600 hover:border-red-400 text-xs px-3 py-1.5 font-medium transition-all"
