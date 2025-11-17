@@ -3,7 +3,7 @@ using Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee;
 using Gosei.EmployeeQualificationManagement.Employees;
 using Gosei.EmployeeQualificationManagement.Enums.Filter;
 using Gosei.EmployeeQualificationManagement.IRepositories;
-using Microsoft.AspNetCore.Authorization;
+using Gosei.EmployeeQualificationManagement.Permissions;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
@@ -25,9 +25,13 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             _employeeRepository = employeeRepository;
             _userManagement = userManager;
             _guidGenerator = guidGenerator;
+            GetPolicyName = EmployeeQualificationManagementPermissions.Employees.Default;
+            GetListPolicyName = EmployeeQualificationManagementPermissions.Employees.Default;
+            CreatePolicyName = EmployeeQualificationManagementPermissions.Employees.Create;
+            UpdatePolicyName = EmployeeQualificationManagementPermissions.Employees.Update;
+            DeletePolicyName = EmployeeQualificationManagementPermissions.Employees.Delete;
         }
 
-        [Authorize(Roles = "admin")]
         protected override async Task<IQueryable<Employee>> CreateFilteredQueryAsync(EmployeeSearchRequest input)
         {
             if (!input.SearchKey.IsNullOrWhiteSpace())
@@ -38,7 +42,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             }
             return await base.CreateFilteredQueryAsync(input);
         }
-        [Authorize(Roles = "admin")]
+  
         public override async Task<EmployeeResponse> CreateAsync(EmployeeRequest input)
         {
             const string password = "1q2w3E*";
@@ -54,7 +58,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             await _employeeRepository.InsertAsync(employee);
             return ObjectMapper.Map<Employee, EmployeeResponse>(employee);
         }
-        [Authorize(Roles = "admin")]
+       
         public override async Task<EmployeeResponse> UpdateAsync(Guid id, EmployeeRequest input)
         {
             Employee employee = await _employeeRepository.GetAsync(id);
@@ -79,7 +83,6 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             await _employeeRepository.UpdateAsync(employee);
             return ObjectMapper.Map<Employee, EmployeeResponse>(employee);
         }
-        [Authorize(Roles = "admin")]
         public override async Task DeleteAsync(Guid id)
         {
             Employee employee = await _employeeRepository.GetAsync(id);

@@ -2,6 +2,7 @@
 using Gosei.EmployeeQualificationManagement.Dtos.Filters;
 using Gosei.EmployeeQualificationManagement.Employees;
 using Gosei.EmployeeQualificationManagement.IRepositories;
+using Gosei.EmployeeQualificationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
         {
             _qualificationRepository = qualificationRepository;
         }
+
         [AllowAnonymous]
         public override async Task<PagedResultDto<QualificationResponse>> GetListAsync(FilterRequest input)
         {

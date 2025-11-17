@@ -2,7 +2,7 @@
 using Gosei.EmployeeQualificationManagement.Dtos.Employees.Qualification;
 using Gosei.EmployeeQualificationManagement.Employees;
 using Gosei.EmployeeQualificationManagement.IRepositories;
-using Microsoft.AspNetCore.Authorization;
+using Gosei.EmployeeQualificationManagement.Permissions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace Gosei.EmployeeQualificationManagement.AppServices
 {
-    [Authorize(Roles = "admin")]
     public class EmployeeQualificationAppService : BaseAppService<EmployeeQualification, EmployeeQualificationResponse, Guid, EmployeeQualificationSearchRequest, EmployeeQualificationRequest>
     {
         private readonly IEmployeeQualificationRepository _employeeQualificationRepository;
@@ -22,8 +21,9 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             _employeeQualificationRepository = employeeQualificationRepository;
             _employeesRepository = employeesRepository;
             _qualificationRepository = qualificationRepository;
+            GetListPolicyName = EmployeeQualificationManagementPermissions.EmployeeQualifications.Default;
+            CreatePolicyName = EmployeeQualificationManagementPermissions.EmployeeQualifications.Create;
         }
-        [Authorize(Roles = "admin")]
         protected override async Task<IQueryable<EmployeeQualification>> CreateFilteredQueryAsync(EmployeeQualificationSearchRequest input)
         {
             var query = await base.CreateFilteredQueryAsync(input);
@@ -41,7 +41,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             }
             return query;
         }
-        [Authorize(Roles = "admin")]
+        
         public override async Task<EmployeeQualificationResponse> CreateAsync(EmployeeQualificationRequest input)
         {
             Employee employee = await _employeesRepository.FindAsync(x => x.Id == input.EmployeeId);

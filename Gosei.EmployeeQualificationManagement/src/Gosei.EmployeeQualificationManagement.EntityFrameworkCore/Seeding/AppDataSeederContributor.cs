@@ -9,20 +9,24 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
         private readonly QualificationDataSeederContributor _qualificationSeeder;
         private readonly EmployeeDataSeederContributor _employeeSeeder;
         private readonly RoleDataSeederContributor _roleSeeder;
+        private readonly PermissionDataSeederContributor _permissionSeeder;
 
         public AppDataSeederContributor(
             QualificationDataSeederContributor qualificationSeeder,
             EmployeeDataSeederContributor employeeSeeder,
-            RoleDataSeederContributor roleSeeder)
+            RoleDataSeederContributor roleSeeder,
+            PermissionDataSeederContributor permissionSeeder)
         {
             _qualificationSeeder = qualificationSeeder;
             _employeeSeeder = employeeSeeder;
             _roleSeeder = roleSeeder;
+            _permissionSeeder = permissionSeeder;
         }
 
         public async Task SeedAsync(DataSeedContext context)
         {
             await _roleSeeder.SeedAsync(context);
+            await _permissionSeeder.SeedAsync(context);
             await _qualificationSeeder.SeedAsync(context);
             await _employeeSeeder.SeedAsync(context);
         }

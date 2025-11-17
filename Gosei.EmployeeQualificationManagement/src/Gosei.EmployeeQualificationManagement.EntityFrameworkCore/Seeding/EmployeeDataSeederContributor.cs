@@ -1,6 +1,5 @@
 ﻿
 using Gosei.EmployeeQualificationManagement.Employees;
-using Gosei.EmployeeQualificationManagement.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -68,7 +67,7 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
                 // create password for user
                 (await _userManager.CreateAsync(user, Password)).CheckErrors();
                 // create role for user
-                string roleName = (i <= 10) ? "admin" : "employee";
+                string roleName = (i <= 10) ? "admin" : ((i <= 20) ? "employee_manager" : "employee");
                 (await _userManager.AddToRoleAsync(user, roleName)).CheckErrors();
 
                 Employee employee = new Employee(user.Id, firstName, middleName, lastName, gender, birthDate, email, note);
