@@ -1,0 +1,14 @@
+﻿{
+  "Culture": "vi",
+  "Texts": {
+    "Permission:EmployeeQualifications": "Quản lý Chứng chỉ",
+    "Permission:EmployeeQualifications.Create": "Tạo Chứng chỉ",
+    "Permission:EmployeeQualifications.Update": "Cập nhật Chứng chỉ",
+    "Permission:EmployeeQualifications.Delete": "Xóa Chứng chỉ",
+
+    "Permission:Employees": "Quản lý Nhân viên",
+    "Permission:Employees.Create": "Tạo Nhân viên",
+    "Permission:Employees.Update": "Cập nhật Nhân viên",
+    "Permission:Employees.Delete": "Xóa Nhân viên"
+  }
+}

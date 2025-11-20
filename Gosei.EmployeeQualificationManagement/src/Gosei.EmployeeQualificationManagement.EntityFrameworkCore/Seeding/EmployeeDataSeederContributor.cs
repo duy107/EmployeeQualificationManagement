@@ -1,5 +1,4 @@
-﻿
-using Gosei.EmployeeQualificationManagement.Employees;
+﻿using Gosei.EmployeeQualificationManagement.Employees;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

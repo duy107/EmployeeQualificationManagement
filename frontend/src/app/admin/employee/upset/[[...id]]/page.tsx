@@ -64,23 +64,26 @@ export default function UpsetEmployee() {
 
   useEffect(() => {
     if (employeeData) {
-        reset(employeeData);
+      reset(employeeData);
     }
-}, [employeeData, reset]);
+  }, [employeeData, reset]);
 
   const onSubmit = async (data: EmployeeRequest) => {
     if (!data.note?.trim()) delete data.note;
     if (!data.middleName?.trim()) delete data.middleName;
     data.firstName = data.firstName?.trim();
     data.lastName = data.lastName?.trim();
-    const res = id
-      ? await updateEmployee(id, data)
-      : await createEmployee(data);
-    if (res.status === 200 || res.status === 201) {
-      queryClient.invalidateQueries({ queryKey: ['employees'] });
-      route.push('/admin/employee');
-    } else {
-      notification("Error. Try again!")
+    try {
+      const res = id
+        ? await updateEmployee(id, data)
+        : await createEmployee(data);
+      if (res.status === 200 || res.status === 201) {
+        queryClient.invalidateQueries({ queryKey: ['employees'] });
+        route.push('/admin/employee');
+      } else {
+        notification("Error. Try again!")
+      }
+    } catch (e) {
     }
   }
 

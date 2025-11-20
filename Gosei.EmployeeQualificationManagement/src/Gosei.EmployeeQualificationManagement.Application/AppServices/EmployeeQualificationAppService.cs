@@ -44,6 +44,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
         
         public override async Task<EmployeeQualificationResponse> CreateAsync(EmployeeQualificationRequest input)
         {
+            await CheckCreatePolicyAsync();
             Employee employee = await _employeesRepository.FindAsync(x => x.Id == input.EmployeeId);
             Qualification qualification = await _qualificationRepository.GetAsync(q => q.Id == input.QualificationId);
             EmployeeQualification employeeQualification = ObjectMapper.Map<EmployeeQualificationRequest, EmployeeQualification>(input);

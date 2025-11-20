@@ -8,7 +8,7 @@ const getPaginatedEmployee = async (data: EmployeePaginatedRequest) => {
 }
 
 const getById = async (id: string) =>
-    await get<EmployeeResponse>(`api/app/employee/${id}`);
+ await get<EmployeeResponse>(`api/app/employee/${id}`);
 
 const createEmployee = async (data: EmployeeRequest) =>
     await post<EmployeeResponse>("api/app/employee", data);

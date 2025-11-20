@@ -4,6 +4,16 @@
     "AppName": "EmployeeQualificationManagement",
     "Menu:Home": "Home",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit",
-    "Welcome": "Welcome"
+    "Welcome": "Welcome",
+
+    "Permission:EmployeeQualifications": "Employee Qualifications",
+    "Permission:EmployeeQualifications.Create": "Create Qualification",
+    "Permission:EmployeeQualifications.Update": "Update Qualification",
+    "Permission:EmployeeQualifications.Delete": "Delete Qualification",
+
+    "Permission:Employees": "Employees",
+    "Permission:Employees.Create": "Create Employee",
+    "Permission:Employees.Update": "Update Employee",
+    "Permission:Employees.Delete": "Delete Employee"
   }
 }

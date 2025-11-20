@@ -1,4 +1,4 @@
-using Gosei.EmployeeQualificationManagement.Localization;
+﻿using Gosei.EmployeeQualificationManagement.Localization;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -70,7 +70,8 @@ public class EmployeeQualificationManagementDomainSharedModule : AbpModule
             options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak")); 
             options.Languages.Add(new LanguageInfo("es", "es", "Spanish")); 
             options.Languages.Add(new LanguageInfo("sv", "sv", "Swedish")); 
-            options.Languages.Add(new LanguageInfo("tr", "tr", "Turkish")); 
+            options.Languages.Add(new LanguageInfo("tr", "tr", "Turkish"));
+            options.Languages.Add(new LanguageInfo("vi", "vi", "Tiếng Việt"));
 
         });
         

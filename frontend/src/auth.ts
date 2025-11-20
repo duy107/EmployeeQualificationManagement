@@ -104,9 +104,15 @@ export const {
             session.refreshToken = token.refreshToken;
             try {
                 const decoded: any = jwtDecode(token.accessToken);
-                session.user.role = decoded?.scope || "EMPLOYEE";
+                session.user = {
+                    ...session.user,
+                    role: decoded?.role || decoded?.scope || "EMPLOYEE" 
+                }
             } catch {
-                session.user.role = "EMPLOYEE";
+                 session.user = {
+                    ...session.user,
+                    role: "EMPLOYEE" 
+                }
             }
             return session;
         },

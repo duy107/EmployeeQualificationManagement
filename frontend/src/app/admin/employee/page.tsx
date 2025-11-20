@@ -3,18 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Pagination from "@/components/ui/pagination";
-import { notification } from "@/lib/utils";
 import { getById, getPaginatedEmployee } from "@/service/admin/employee.service";
 import { EmployeePaginatedRequest, EmployeeRequest } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Search } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import DeleteEmployee from "./delete";
 
 function Employees() {
+    const { data: session } = useSession();
+    const role = session?.user?.role;
     const pageSize = 5;
     const router = useRouter();
     const [totalItem, setTotalItem] = useState(0);
@@ -38,10 +39,12 @@ function Employees() {
         queryFn: async () => {
             const res = await getPaginatedEmployee(search);
             if (res.status !== 200)
-                throw new Error("Failed to fetch employees");
+                throw new Error(res.status === 401 ? "SESSION_EXPIRED" : "API_ERROR");
             return res.data;
         },
-        staleTime: 2 * 60 * 1000, // cache 2 minutes
+        staleTime: 2 * 60 * 1000,
+        retry: false,
+
     });
     useEffect(() => {
         if (data) {
@@ -62,10 +65,11 @@ function Employees() {
     }, [data, currentPage]);
     useEffect(() => {
         if (isError && error) {
-            notification((error as Error).message);
-            setTotalItem(0);
+            signOut({ redirect: false }).then(() => {
+                router.replace("/login");
+            });
         }
-    }, [isError, error]);
+    }, [isError, error, router]);
 
     const handleHover = (employeeId: string) => {
         queryClient.prefetchQuery({
@@ -80,7 +84,6 @@ function Employees() {
                     }
                     return emp;
                 }
-                throw new Error("Failed to prefetch employee");
             },
             staleTime: 60 * 1000
         });
@@ -124,7 +127,7 @@ function Employees() {
         // await signOut({ callbackUrl: "/login" });
     }
 
-    if (isLoading) {
+    if (isLoading || isError || error) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <Loader2 className="w-12 h-12 animate-spin text-cyan-500" />
@@ -167,6 +170,12 @@ function Employees() {
                     >
                         Logout
                     </Button>
+                    {role == "admin" && <Button
+                        variant="outline"
+                        className="h-11 px-6 border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors font-medium"
+                    >
+                        <Link href={"/admin/permission"}>Permission</Link>
+                    </Button>}
                 </div>
 
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">

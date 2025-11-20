@@ -11,6 +11,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { HttpError } from '@/lib/api.lib';
+import { notification } from '@/lib/utils';
 import { create } from '@/service/admin/employeeQualification.service';
 import { useQualificationStore } from '@/store/useQualificationStore';
 import {
@@ -39,8 +41,12 @@ export default function AddQualificationModal({
             if (data.status === 200) {
                 reset(initForm)
                 onClose();
-                queryClient.invalidateQueries({ queryKey: ['employee-qualification']})
+                queryClient.invalidateQueries({ queryKey: ['employee-qualification'] })
             } else alert("Error! Try again");
+        },
+        onError: (error) => {
+            if (error instanceof HttpError) return;
+            notification(error.message);
         }
     });
     const initForm = {

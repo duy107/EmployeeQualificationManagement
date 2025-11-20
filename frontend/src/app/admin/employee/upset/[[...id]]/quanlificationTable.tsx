@@ -8,6 +8,7 @@ import { QualificationPaginatedRequest } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import AddQualificationModal from "./addQualification";
+import { HttpError } from "@/lib/api.lib";
 
 
 function QualificationForm({ employeeId }: { employeeId: string }) {
@@ -33,10 +34,10 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
                 throw new Error(`Failed to fetch list qualification with employeeId: ${employeeId}`);
             return res.data;
         },
-        staleTime: 10 * 60 * 1000
+        staleTime: 10 * 60 * 1000,
+        retry: false
     });
-
-
+    
     useEffect(() => {
         if (data) {
             setTotalQualification(data?.totalCount || 0);
@@ -45,7 +46,7 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
 
     useEffect(() => {
         if (isError && error) {
-            notification((error as Error).message);
+            if(error instanceof HttpError) return;
             setTotalQualification(0);
         }
     }, [isError, error]);

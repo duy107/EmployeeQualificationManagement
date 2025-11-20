@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { HttpError } from "@/lib/api.lib";
 import { notification } from "@/lib/utils";
 import { deleteEmployee } from "@/service/admin/employee.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,10 +16,11 @@ function DeleteEmployee({ employeeId }: DeleteEmployeeProps) {
             if (res.status === 204) {
                 notification("Deleted employee successfully", "success");
                 queryClient.invalidateQueries({ queryKey: ['employees'] });
-            } else notification("Try again!");
+            } 
         },
         onError: (error) => {
-            notification((error as Error).message);
+            if(error instanceof HttpError) return;
+            notification(error.message);
         }
     })
     const handleDelete = async () => {

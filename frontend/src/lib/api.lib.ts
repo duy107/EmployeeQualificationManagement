@@ -3,6 +3,18 @@ import { getSession, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { notification } from "./utils";
 
+export class HttpError extends Error {
+    status: number;
+    data: any;
+
+    constructor(status: number, message: string, data: any = null) {
+        super(message);
+        this.name = 'HttpError';
+        this.status = status;
+        this.data = data;
+    }
+}
+
 const publicEndpoint = ["connect/token"];
 const apiOpenId = ["connect/token"];
 
@@ -26,7 +38,7 @@ const getAuthHeaders = async (): Promise<Record<string, string>> => {
         : {};
 }
 
-const post = async <T>(path: string, data?: unknown): Promise<{ status: number , data: T}> => {
+const post = async <T>(path: string, data?: unknown): Promise<{ status: number, data: T }> => {
     const requestHeaders = headers(path);
     const contentType = requestHeaders["Content-Type"];
     let body: BodyInit | null = null;
@@ -103,9 +115,13 @@ const fetchAPI = async (path: string, options: RequestInit) => {
         };
     }
     const res = await fetch(fullUrl, options);
-
-    if (res.status === 401 || res.status === 403) {
+    if (res.status === 401) {
         (typeof window !== "undefined") ? signOut({ callbackUrl: "/login" }) : redirect("/login");
+    }
+
+    if (res.status === 403) {
+        notification("Authorization failed (403)");
+        throw new HttpError(403, "Authorization failed (403)");
     }
 
     if (res.status === 204) {

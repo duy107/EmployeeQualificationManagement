@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending.Modularity;
 
 namespace Gosei.EmployeeQualificationManagement.Seeding
 {

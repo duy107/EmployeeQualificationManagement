@@ -45,6 +45,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
   
         public override async Task<EmployeeResponse> CreateAsync(EmployeeRequest input)
         {
+            await CheckCreatePolicyAsync();
             const string password = "1q2w3E*";
             const string roleName = "employee";
             string baseUserName = $"{input.FirstName}{input.MiddleName}{input.LastName}".Replace(" ", "");
@@ -61,6 +62,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
        
         public override async Task<EmployeeResponse> UpdateAsync(Guid id, EmployeeRequest input)
         {
+            await CheckUpdatePolicyAsync();
             Employee employee = await _employeeRepository.GetAsync(id);
             
             IdentityUser user = await _userManagement.FindByIdAsync(id.ToString());
@@ -85,6 +87,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
         }
         public override async Task DeleteAsync(Guid id)
         {
+            await CheckDeletePolicyAsync();
             Employee employee = await _employeeRepository.GetAsync(id);
             IdentityUser user = await _userManagement.FindByIdAsync(id.ToString());
             if(user == null)
