@@ -1,3 +1,9 @@
 import { TypeResponse } from "../utils.type";
 
-export type RoleResponse = TypeResponse<"/api/app/role/with-permissions", "get">;
+export type RoleResponse = {
+    id?: string,
+    name: string,
+    isPublic: boolean,
+    isStatic: boolean,
+    grantedPermissions: string[]
+}

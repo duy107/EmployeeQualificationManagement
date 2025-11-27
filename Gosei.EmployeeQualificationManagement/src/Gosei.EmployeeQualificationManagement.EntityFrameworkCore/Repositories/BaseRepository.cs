@@ -13,10 +13,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Gosei.EmployeeQualificationManagement.Repositories
 {
-    public class BaseRepository<TEntity, TKey> : EfCoreRepository<EmployeeQualificationManagementDbContext, TEntity, TKey>, IBaseRepository<TEntity, TKey>
+    public class BaseRepository<TEntity, TKey>(IDbContextProvider<EmployeeQualificationManagementDbContext> contextProvider) : EfCoreRepository<EmployeeQualificationManagementDbContext, TEntity, TKey>(contextProvider), IBaseRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
-        public BaseRepository(IDbContextProvider<EmployeeQualificationManagementDbContext> contextProvider) : base(contextProvider) { }
         public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken, params Expression<Func<TEntity, object>>[] includeExpressions)
         {
             var query = await GetQueryableAsync();

@@ -1,6 +1,7 @@
 import { get } from "@/lib/api.lib";
+import { QualificationPaginatedResponse } from "@/types";
 
 const getAll = async () =>
-    await get<any>("api/app/qualification");
+    await get<QualificationPaginatedResponse>("api/app/qualification");
 
 export { getAll };

@@ -27,15 +27,41 @@ public class Program
                 .UseSerilog((context, services, loggerConfiguration) =>
                 {
                     loggerConfiguration
-                    #if DEBUG
-                        .MinimumLevel.Debug()
-                    #else
+                        // 1. ĐẶT MỨC TỔNG THỂ LÀ INFORMATION
                         .MinimumLevel.Information()
-                    #endif
-                        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                        .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+                        // 2. TẮT TẤT CẢ LOG NHIỄU CHUNG
+                        .MinimumLevel.Override("Microsoft", LogEventLevel.Fatal)
+                        .MinimumLevel.Override("System", LogEventLevel.Fatal)
+                        .MinimumLevel.Override("Volo.Abp", LogEventLevel.Fatal)
+                        .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Error)
+
+                        // 3. MỞ LẠI LOG SQL COMMAND
+                        .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Information)
+                        // 4. THÊM FILTER ĐỂ LOẠI TRỪ LOG SQL CỦA WORKER
+                        .Filter.ByExcluding(logEvent =>
+                        {
+                            // Chỉ áp dụng filter cho Log SQL
+                            if (logEvent.Properties.TryGetValue("SourceContext", out var sourceContext) &&
+                                sourceContext.ToString().Contains("Microsoft.EntityFrameworkCore.Database.Command"))
+                            {
+                                // Lấy nội dung message (lệnh SQL)
+                                var message = logEvent.RenderMessage();
+
+                                // Loại trừ các truy vấn định kỳ (Chứa các tên bảng của Worker)
+                                if (message.Contains("AbpBackgroundJobs") ||
+                                    message.Contains("AbpSettings") ||
+                                    message.Contains("AbpFeature") ||
+                                    message.Contains("AbpPermission") || 
+                                    message.Contains("AbpRoles"))
+                                {
+                                    return true; // Loại trừ (Exclude) log này
+                                }
+                            }
+                            return false; // Giữ lại (Include) log này
+                        })
+
                         .Enrich.FromLogContext()
-                        .WriteTo.Async(c => c.File("Logs/logs.txt"))
+                        .WriteTo.Async(c => c.File("Logs/logs.txt", restrictedToMinimumLevel: LogEventLevel.Fatal))
                         .WriteTo.Async(c => c.Console())
                         .WriteTo.Async(c => c.AbpStudio(services));
                 });

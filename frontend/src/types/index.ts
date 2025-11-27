@@ -4,6 +4,7 @@ export * from "./response/employee.response";
 export * from "./response/qualification.response";
 export * from "./response/permission.response";
 export * from "./response/role.response";
+export * from "./response/employeeQualification.response";
 export type CommonResponse = { status: number }
 
 

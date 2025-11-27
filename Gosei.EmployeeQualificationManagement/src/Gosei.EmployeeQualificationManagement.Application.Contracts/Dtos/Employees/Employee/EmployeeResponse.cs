@@ -9,7 +9,7 @@ namespace Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
-        public string BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Email { get; set; }
         public string Note { get; set; }    
     }

@@ -7,8 +7,8 @@ namespace Gosei.EmployeeQualificationManagement.Dtos.Employees.EmployeeQualifica
     {
         public string Institution { get; set; }
         public string City { get; set; }
-        public string ValidFrom { get; set; }
-        public string ValidTo { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? ValidTo { get; set; }
 
         // qualification
         public string QualificationName { get; set; }

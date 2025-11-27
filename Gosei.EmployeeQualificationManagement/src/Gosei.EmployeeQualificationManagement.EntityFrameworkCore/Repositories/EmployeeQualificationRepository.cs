@@ -6,8 +6,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Gosei.EmployeeQualificationManagement.Repositories
 {
-    public class EmployeeQualificationRepository : BaseRepository<EmployeeQualification, Guid>, IEmployeeQualificationRepository
+    public class EmployeeQualificationRepository(IDbContextProvider<EmployeeQualificationManagementDbContext> provider) : BaseRepository<EmployeeQualification, Guid>(provider), IEmployeeQualificationRepository
     {
-        public EmployeeQualificationRepository(IDbContextProvider<EmployeeQualificationManagementDbContext> provider) : base(provider) { }
     }
 }

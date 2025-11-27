@@ -1,25 +1,30 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { notification } from "@/lib/utils"
+import { loginFormSchema, LoginFormType } from "@/types"
 import { Eye, EyeOff } from "lucide-react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-
-type FormLogin = {
-  username: string,
-  password: string
-}
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui";
 
 export default function LoginPage() {
   const route = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormLogin>();
-  const onSubmit = async (data: FormLogin) => {
+  const form = useForm<LoginFormType>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      username: "",
+      password: ""
+    }
+  });
+  const { isSubmitting } = form.formState;
+  const onSubmit = async (data: LoginFormType) => {
     try {
       const res = await signIn("credentials", {
         username: data.username,
@@ -42,51 +47,60 @@ export default function LoginPage() {
           <CardTitle className="text-center text-2xl font-bold">Đăng nhập</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <div>
-                <Input
-                  placeholder="Username/email..."
-                  {
-                  ...register("username", {
-                    required: "Username or email is required!"
-                  })
-                  }
-                />
-                {errors.username && <p className="text-red-500 text-[12px] mt-2">{errors.username.message}</p>}
-              </div>
-              <div className="relative">
-
-                <Input
-                  placeholder="Password..."
-                  type={showPassword ? "text" : "password"}
-                  {...register("password", {
-                    required: "Password is requried!",
-                    minLength: {
-                      value: 2,
-                      message: "Password at least 2 characters"
-                    }
-                  })}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="hover:cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-              {errors.password && <p className="text-red-500 text-[12px]">{errors.password.message}</p>}
-            </div>
-
-            <Button className="w-full" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
-            </Button>
-          </form>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username/Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="user1/user1@email.com..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <div className="relative">
+                      <FormControl>
+                        <Input
+                          placeholder="******"
+                          type={showPassword ? "text" : "password"}
+                          {...field}
+                        />
+                      </FormControl>
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="hover:cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </main>

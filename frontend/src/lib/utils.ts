@@ -12,34 +12,26 @@ export const notification = (mess: string, type: "error" | "success" = "error") 
   });
 }
 
-const parseDate = (dateStr?: string | null): Date | null => {
-  if (!dateStr || dateStr === '-') return null;
-  const parts = dateStr.split('/');
-  if (parts.length !== 3) return null;
-  const [day, month, year] = parts.map(Number);
-  return new Date(year, month - 1, day);
+export const removeEmptyStrings = (obj: any): any => {
+  for (const key in obj) {
+    obj[key] === "" && delete obj[key];
+  }
+  return obj;
 };
 
 
-export const checkDate = (validFrom: string, validTo: string) => {
-  const from = parseDate(validFrom);
-  const to = parseDate(validTo);
-  const toDateOnly = (d: Date) => {
-    const x = new Date(d);
-    x.setHours(0, 0, 0, 0);
-    return x;
-  };
+export const checkDate = (validFrom: Date | string | null, validTo: Date | string | null) => {
+
+  const from = validFrom && new Date(validFrom);
+  const to = validTo && new Date(validTo);
+  const today = new Date();
 
   let isValid = false;
   if (from && to) {
-    const f = toDateOnly(from);
-    const t = toDateOnly(to);
-    const today = toDateOnly(new Date());
-
-    if (f.getTime() === t.getTime()) {
+    if (from.getTime() === to.getTime()) {
       isValid = true;
     }
-    else if (f.getTime() <= today.getTime() && today.getTime() <= t.getTime()) {
+    else if (from.getTime() <= today.getTime() && today.getTime() <= to.getTime()) {
       isValid = true;
     } else {
       isValid = false;

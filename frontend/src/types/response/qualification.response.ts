@@ -1,5 +1,9 @@
-import { TypeResponse } from "../utils.type";
+import { PaginatedResponse } from "../common"
 
-export type QualificationPaginatedResponse = TypeResponse<"/api/app/employee-qualification", "get">;
-export type QualificationResponse = TypeResponse<"/api/app/qualification/{id}", "get">;
-export type EmployeeQualificationResponse = TypeResponse<"/api/app/employee-qualification">;
+export type QualificationPaginatedResponse = PaginatedResponse<QualificationResponse>;
+
+export type QualificationResponse = {
+    id?: string,
+    name: string, 
+    code: string
+}

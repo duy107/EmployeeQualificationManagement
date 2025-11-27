@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/ui";
 import Pagination from "@/components/ui/pagination";
-import { checkDate, notification } from "@/lib/utils";
+import { HttpError } from "@/lib/api.lib";
 import { getPaginatedEmployeeQualification } from "@/service/admin/employeeQualification.service";
 import { QualificationPaginatedRequest } from "@/types";
 import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import AddQualificationModal from "./addQualification";
-import { HttpError } from "@/lib/api.lib";
+import { checkDate } from "@/lib/utils";
 
 
 function QualificationForm({ employeeId }: { employeeId: string }) {
@@ -87,7 +88,7 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
                     <tbody>
                         {data?.items?.length || 0 > 0 ? (
                             data?.items?.map((q, index) => {
-                                const isValid = checkDate(q.validFrom || "", q.validTo || "");
+                                const isValid = checkDate(q.validFrom, q.validTo);
                                 return (
                                     <tr
                                         key={index}
@@ -97,8 +98,8 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
                                         <td className="px-2 py-1">{q.qualificationName}</td>
                                         <td className="px-2 py-1">{q.institution}</td>
                                         <td className="px-2 py-1">{q.city}</td>
-                                        <td className="px-2 py-1">{q.validFrom || '-'}</td>
-                                        <td className="px-2 py-1">{q.validTo || '-'}</td>
+                                        <td className="px-2 py-1">{q.validFrom ? format(new Date(q.validFrom), "dd/MM/yyyy") : "-"}</td>
+                                        <td className="px-2 py-1">{q.validTo ? format(new Date(q.validTo), "dd/MM/yyyy") : "-"}</td>
                                         <td className="px-2 py-1 text-center">
                                             <span
                                                 className={isValid ? "text-green-600" : "text-red-600"}

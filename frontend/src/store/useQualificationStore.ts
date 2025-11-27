@@ -20,7 +20,7 @@ export const useQualificationStore = create<QualificationStore>((set, get) => ({
     try {
       const res = await getAll();
       if (res.status === 200) {
-        set({ qualifications: res.data?.items || [] });
+        set({ qualifications: res.data.items || [] });
       } else {
         notification("Không lấy được danh sách quyền!");
       }

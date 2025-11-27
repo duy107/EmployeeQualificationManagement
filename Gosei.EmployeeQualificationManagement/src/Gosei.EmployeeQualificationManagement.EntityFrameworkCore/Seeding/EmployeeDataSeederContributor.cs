@@ -1,5 +1,7 @@
-﻿using Gosei.EmployeeQualificationManagement.Employees;
+﻿using Gosei.EmployeeQualificationManagement.Constants.Roles;
+using Gosei.EmployeeQualificationManagement.Employees;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,27 +13,27 @@ using Volo.Abp.Identity;
 
 namespace Gosei.EmployeeQualificationManagement.Seeding
 {
-    public class EmployeeDataSeederContributor : ITransientDependency
+    public class EmployeeDataSeederContributor
+        (IRepository<Employee, Guid> employeeRepository,
+        IGuidGenerator guidGenerator,
+        IdentityUserManager userManager,
+        IRepository<Qualification, Guid> qualificationRepository,
+        IConfiguration configuration) : ITransientDependency
     {
-        private readonly IRepository<Employee, Guid> _employeeRepository;
-        private readonly IRepository<Qualification, Guid> _qualificationRepository;
-        private readonly IGuidGenerator _guidGenerator;
-        private readonly IdentityUserManager _userManager;
-        private const string Password = "1q2w3E*";
-
-        public EmployeeDataSeederContributor(IRepository<Employee, Guid> employeeRepository, IGuidGenerator guidGenerator, IdentityUserManager userManager, IRepository<Qualification, Guid> qualificationRepository)
-        {
-            _employeeRepository = employeeRepository;
-            _qualificationRepository = qualificationRepository;
-            _guidGenerator = guidGenerator;
-            _userManager = userManager;
-        }
+        private readonly IRepository<Employee, Guid> _employeeRepository = employeeRepository;
+        private readonly IRepository<Qualification, Guid> _qualificationRepository = qualificationRepository;
+        private readonly IGuidGenerator _guidGenerator = guidGenerator;
+        private readonly IdentityUserManager _userManager = userManager;
+        private readonly IConfiguration _configuration = configuration;
 
         public async Task SeedAsync(DataSeedContext context)
         {
+            var defaultPassword = _configuration["Seeding:DefaultPassword"]; 
+            
             if (await _employeeRepository.CountAsync() > 0)
                 return;
             var qMap = new Dictionary<string, Guid>();
+           
             try
             {
                 qMap.Add("BD", (await _qualificationRepository.GetAsync(q => q.Code == "BD")).Id);
@@ -41,10 +43,11 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
             }
             catch(Exception ex)
             {
-                throw new Exception("Error: Qualification not found");
+                throw new Exception(ex.Message);
             }
 
             List<Employee> employees = new();
+           
             for(int i = 1; i <= 200; i++)
             {
                 string firstName = $"First Name {i}";
@@ -55,6 +58,7 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
                 string gender = "Male";
                 DateTime birthDate = new DateTime(1900, 1, 1);
                 string note = $"Test Note {i}";
+                
                 IdentityUser user = new IdentityUser
                 (
                     _guidGenerator.Create(),
@@ -64,9 +68,11 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
                 );
 
                 // create password for user
-                (await _userManager.CreateAsync(user, Password)).CheckErrors();
+                (await _userManager.CreateAsync(user, defaultPassword ?? "1q2w3E*")).CheckErrors();
+                
                 // create role for user
-                string roleName = (i <= 10) ? "admin" : ((i <= 20) ? "employee_manager" : "employee");
+                string roleName = (i <= 10) ? RoleConstant.Admin : RoleConstant.Employee;
+                
                 (await _userManager.AddToRoleAsync(user, roleName)).CheckErrors();
 
                 Employee employee = new Employee(user.Id, firstName, middleName, lastName, gender, birthDate, email, note);
@@ -80,6 +86,7 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
                 else if (i == 8) employee.AddQualification(CreateQualLink(qMap["Q4"], "Test Institution 8", "HCM City"));
                 else if (i == 9) employee.AddQualification(CreateQualLink(qMap["BD"], "Test Institution 9", "HCM City"));
                 else if (i == 10) employee.AddQualification(CreateQualLink(qMap["D"], "Test Institution 10", "HCM City"));
+                
                 employees.Add(employee);
             }
             await _employeeRepository.InsertManyAsync(employees, autoSave: true);

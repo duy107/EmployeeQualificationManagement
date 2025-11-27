@@ -1,10 +1,9 @@
 "use client"
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Pagination from "@/components/ui/pagination";
 import { getById, getPaginatedEmployee } from "@/service/admin/employee.service";
-import { EmployeePaginatedRequest, EmployeeRequest } from "@/types";
+import { EmployeePaginatedRequest, EmployeeResponse } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Search } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -12,9 +11,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import DeleteEmployee from "./delete";
+import { format } from "date-fns";
 
 function Employees() {
     const { data: session } = useSession();
+    const [firstLoad, setFirstLoad] = useState(true);
     const role = session?.user?.role;
     const pageSize = 5;
     const router = useRouter();
@@ -32,6 +33,7 @@ function Employees() {
     const {
         data,
         isLoading,
+        isFetching,
         isError,
         error
     } = useQuery({
@@ -70,19 +72,24 @@ function Employees() {
             });
         }
     }, [isError, error, router]);
-
+    useEffect(() => {
+        if (!isLoading) {
+            setFirstLoad(false);
+        }
+    }, [isLoading]);
+    
     const handleHover = (employeeId: string) => {
         queryClient.prefetchQuery({
             queryKey: ["employee", employeeId],
             queryFn: async () => {
                 const res = await getById(employeeId);
                 if (res.status === 200) {
-                    const emp = res.data as EmployeeRequest;
-                    const parts = emp.birthDate?.split('/');
-                    if (parts?.length === 3) {
-                        emp.birthDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                    }
-                    return emp;
+                    const emp = res.data as EmployeeResponse;
+                    const cleanedDate = {
+                        ...emp,
+                        birthDate: emp.birthDate ? new Date(emp.birthDate) : new Date(1990, 1, 1)
+                    } as EmployeeResponse;
+                    return cleanedDate;
                 }
             },
             staleTime: 60 * 1000
@@ -127,7 +134,7 @@ function Employees() {
         // await signOut({ callbackUrl: "/login" });
     }
 
-    if (isLoading || isError || error) {
+    if (isError || error || (isLoading && firstLoad)) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <Loader2 className="w-12 h-12 animate-spin text-cyan-500" />
@@ -181,7 +188,7 @@ function Employees() {
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                     <div className="bg-linear-to-r from-cyan-500 to-cyan-600 text-white px-6 py-4 flex justify-between items-center">
                         <h2 className="text-xl font-semibold tracking-wide">Employees</h2>
-                        <Link href={"/admin/employee/upset"}>
+                        <Link href={"/admin/employee/upsert"}>
                             <Button
                                 className="bg-pink-500 hover:bg-pink-600 text-white rounded-lg px-5 py-2 text-sm font-medium shadow-md hover:shadow-lg transition-all"
                             >
@@ -234,48 +241,60 @@ function Employees() {
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200 w-full overflow-y-auto">
-                                    {data?.items?.length || 0 > 0 ? (
-                                        data?.items?.map((employee, index) => (
-                                            <tr key={employee.id} className="hover:bg-gray-50 transition-colors">
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {(currentPage - 1) * pageSize + index + 1}
-                                                </td>
-                                                <td
-                                                    className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                                                    <Link
-                                                        onMouseEnter={() => handleHover(employee.id || "")}
-                                                        href={`/admin/employee/upset/${employee.id}`}>{employee.firstName}</Link>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {employee.lastName}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {employee.gender}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {employee.birthDate}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {employee.email}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                    <DeleteEmployee employeeId={employee.id} />
+                                {
+                                    isFetching ? (
+                                        <tbody>
+                                            <tr>
+                                                <td colSpan={7} className="px-6 py-12 text-center">
+                                                    <Loader2 className="w-8 h-8 animate-spin text-cyan-500 mx-auto" />
                                                 </td>
                                             </tr>
-                                        ))
+                                        </tbody>
                                     ) : (
-                                        <tr>
-                                            <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
-                                                <div className="flex flex-col items-center gap-2">
-                                                    <Search className="w-12 h-12 text-gray-300" />
-                                                    <p className="text-lg font-medium">No employees found</p>
-                                                    <p className="text-sm">Try adjusting your search criteria</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
+                                        <tbody className="bg-white divide-y divide-gray-200 w-full overflow-y-auto">
+                                            {data?.items?.length || 0 > 0 ? (
+                                                data?.items?.map((employee, index) => (
+                                                    <tr key={employee.id} className="hover:bg-gray-50 transition-colors">
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                            {(currentPage - 1) * pageSize + index + 1}
+                                                        </td>
+                                                        <td
+                                                            className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                                                            <Link
+                                                                onMouseEnter={() => handleHover(employee.id || "")}
+                                                                href={`/admin/employee/upsert/${employee.id}`}>{employee.firstName}</Link>
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                            {employee.lastName}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                            {employee.gender}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                            {format(employee.birthDate, "dd/MM/yyyy")}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                            {employee.email}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                            <DeleteEmployee employeeId={employee.id} />
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                                                        <div className="flex flex-col items-center gap-2">
+                                                            <Search className="w-12 h-12 text-gray-300" />
+                                                            <p className="text-lg font-medium">No employees found</p>
+                                                            <p className="text-sm">Try adjusting your search criteria</p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    )
+                                }
                             </table>
                         </div>
                     </div>

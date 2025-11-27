@@ -3,6 +3,7 @@ using Gosei.EmployeeQualificationManagement.Dtos.Employees.Qualification;
 using Gosei.EmployeeQualificationManagement.Employees;
 using Gosei.EmployeeQualificationManagement.IRepositories;
 using Gosei.EmployeeQualificationManagement.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             _employeeQualificationRepository = employeeQualificationRepository;
             _employeesRepository = employeesRepository;
             _qualificationRepository = qualificationRepository;
-            GetListPolicyName = EmployeeQualificationManagementPermissions.EmployeeQualifications.Default;
-            CreatePolicyName = EmployeeQualificationManagementPermissions.EmployeeQualifications.Create;
+            GetListPolicyName = PermissionConstant.EmployeeQualifications.Default;
         }
         protected override async Task<IQueryable<EmployeeQualification>> CreateFilteredQueryAsync(EmployeeQualificationSearchRequest input)
         {
@@ -41,15 +41,18 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             }
             return query;
         }
-        
+
+        [Authorize(PermissionConstant.EmployeeQualifications.Create)]
         public override async Task<EmployeeQualificationResponse> CreateAsync(EmployeeQualificationRequest input)
         {
-            await CheckCreatePolicyAsync();
-            Employee employee = await _employeesRepository.FindAsync(x => x.Id == input.EmployeeId);
+            Employee employee = await _employeesRepository.GetAsync(x => x.Id == input.EmployeeId);
             Qualification qualification = await _qualificationRepository.GetAsync(q => q.Id == input.QualificationId);
             EmployeeQualification employeeQualification = ObjectMapper.Map<EmployeeQualificationRequest, EmployeeQualification>(input);
+            
             employee.AddQualification(employeeQualification);
+
             await _employeesRepository.UpdateAsync(employee);
+
             return ObjectMapper.Map<EmployeeQualification, EmployeeQualificationResponse>(employeeQualification);
         }
     }

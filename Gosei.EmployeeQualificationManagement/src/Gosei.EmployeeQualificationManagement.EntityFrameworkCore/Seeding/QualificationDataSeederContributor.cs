@@ -9,16 +9,11 @@ using Volo.Abp.Guids;
 
 namespace Gosei.EmployeeQualificationManagement.Seeding
 {
-    public class QualificationDataSeederContributor : ITransientDependency
+    public class QualificationDataSeederContributor(IRepository<Qualification, Guid> qualificationRepository, IGuidGenerator guidGenerator) : ITransientDependency
     {
-        private readonly IRepository<Qualification, Guid> _qualificationRepository;
-        private readonly IGuidGenerator _guidGenerator;
+        private readonly IRepository<Qualification, Guid> _qualificationRepository = qualificationRepository;
+        private readonly IGuidGenerator _guidGenerator = guidGenerator;
 
-        public QualificationDataSeederContributor(IRepository<Qualification, Guid> qualificationRepository, IGuidGenerator guidGenerator)
-        {
-            _qualificationRepository = qualificationRepository;
-            _guidGenerator = guidGenerator;
-        }
         public async Task SeedAsync(DataSeedContext context)
         {
             if (await _qualificationRepository.CountAsync() > 0)

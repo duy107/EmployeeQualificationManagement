@@ -1,4 +1,6 @@
-import { TypeRequest } from "../utils.type";
+import * as z from "zod";
+
+const GenderEnum = z.enum(["Male", "Female"]);
 
 export type EmployeePaginatedRequest = {
     search: string,
@@ -8,4 +10,25 @@ export type EmployeePaginatedRequest = {
     sortOrderLastName: "desc" | "asc"
 }
 
-export type EmployeeRequest = TypeRequest<"Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeRequest">;
+export const upsertEmployeeSchema = z.object({
+    firstName: z.string().trim()
+        .min(1, { message: "Required!" })
+        .max(10, { message: "Maximum 10 characters" })
+        .regex(/^(?=.*[a-zA-Z])[a-zA-Z ]+$/, { message: "Can only contain letters and space" }),
+    middleName: z.string().trim()
+        .max(10, { message: "Maximum 10 characters" })
+        .nullable()
+        .optional(),
+    lastName: z.string().trim()
+        .min(1, { message: "Required!" })
+        .max(10, { message: "Maximum 10 characters" })
+        .regex(/^(?=.*[a-zA-Z])[a-zA-Z ]+$/, { message: "Can only contain letters and space" }),
+    birthDate: z.date({ message: "Invalid!" }),
+    gender: GenderEnum
+        .nullable(),
+    note: z.string().trim()
+        .nullable()
+        .optional()
+});
+
+export type UpsertEmployeeType = z.infer<typeof upsertEmployeeSchema>;

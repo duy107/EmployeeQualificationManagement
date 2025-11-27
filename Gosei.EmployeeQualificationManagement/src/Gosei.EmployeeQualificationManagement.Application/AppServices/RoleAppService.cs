@@ -24,10 +24,11 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
         {
             var roles = await _roleRepository.GetListAsync();
             var targetRoles = roles.Where(role => role.Name != "admin").ToList();
+            
             if (!targetRoles.Any())
                 return new();
+            
             var rolesName = targetRoles.Select(role => role.Name).ToList();
-
             var grants = await _permissionGrantRepository.GetListAsync();
             var result = targetRoles.Select(r => new RoleResponse
             {
@@ -38,6 +39,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
                 GrantedPermissions = grants.Where(grant => grant.ProviderKey == r.Name)
                                            .Select(grant => grant.Name).ToList()
             }).ToList();
+
             return result;
         }
     }

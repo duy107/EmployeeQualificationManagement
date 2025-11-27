@@ -1,11 +1,10 @@
-import { TypeRequest, TypeResponse } from "../utils.type";
-
-export type ListPermissionResponse = TypeResponse<"/api/app/permission/by-group", "get">;
-
-export type PermissionNode = {
-    name: string;
-    displayName: string;
-    children?: PermissionNode[];
+export type PermissionGroupResponse = {
+    name: string,
+    displayName: string,
+    permissions: PermissionNodeResponse[]
 }
-
-export type PermissionNodeResponse = TypeRequest<"Gosei.EmployeeQualificationManagement.Dtos.Roles.Permission.PermissionDefinitionResponse">;
+export type PermissionNodeResponse = {
+    name: string,
+    displayName: string,
+    children: PermissionNodeResponse[]
+}

@@ -23,6 +23,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
         {
             var query = await CreateFilteredQueryAsync(input);
             var allItems = await AsyncExecuter.ToListAsync(query);
+            
             return new PagedResultDto<QualificationResponse>(
                 allItems.Count,
                 ObjectMapper.Map<List<Qualification>, List<QualificationResponse>>(allItems));

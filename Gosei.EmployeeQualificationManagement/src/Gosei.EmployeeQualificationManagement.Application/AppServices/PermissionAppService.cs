@@ -18,7 +18,6 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
         private readonly IPermissionDefinitionManager _permissionDefinitionManager;
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
         private readonly IPermissionManager _permissionManager;
-
         public PermissionAppService(IPermissionDefinitionManager permissionDefinitionManager, IStringLocalizerFactory stringLocalizerFactory, IPermissionManager permissionManager)
         {
             _permissionDefinitionManager = permissionDefinitionManager;
@@ -28,14 +27,15 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
 
         public async Task<PermissionGroupResponse> GetByGroupAsync()
         {
-            string groupName = EmployeeQualificationManagementPermissions.GroupName;
             var allGroups = await _permissionDefinitionManager.GetGroupsAsync();
-            var group = allGroups.FirstOrDefault(g => g.Name == groupName);
+            var group = allGroups.FirstOrDefault(g => g.Name == PermissionConstant.GroupName);
+            
             PermissionGroupResponse groupResponse = new PermissionGroupResponse
             {
                 Name = group.Name,
                 DisplayName = GetLocalizedString(group.DisplayName)
             };
+            
             groupResponse.Permissions = group.Permissions.Select(MapPermissionToResponse).ToList();
             return groupResponse;
         }

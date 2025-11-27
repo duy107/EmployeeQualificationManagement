@@ -4,14 +4,14 @@ import { Button } from "@/components/ui";
 import { notification } from "@/lib/utils";
 import { getAllByGroup, updatePermission } from "@/service/admin/permission.service";
 import { getAll } from "@/service/admin/role.service";
-import { BulkRoleUpdateRequest, ListPermissionResponse, PermissionNodeResponse, RoleResponse } from "@/types";
+import { PermissionGroupResponse, PermissionNodeResponse, RoleResponse, UpdateBulkRoleType } from "@/types";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Save } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { renderPermissionRows } from "./permissionRow";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 
 function PermissionPage() {
     const router = useRouter();
@@ -44,10 +44,10 @@ function PermissionPage() {
 
     const hasError = results.some(r => r.isError);
 
-    const permissionGroup = results[0].data as ListPermissionResponse;
+    const permissionGroup = results[0].data as PermissionGroupResponse;
     const permissions = permissionGroup?.permissions as PermissionNodeResponse[];
-    const roles = results[1].data as RoleResponse;
-    const [roleCheckboxs, setRoleCheckboxs] = useState<RoleResponse>([]);
+    const roles = results[1].data as RoleResponse[];
+    const [roleCheckboxs, setRoleCheckboxs] = useState<RoleResponse[]>([]);
     useEffect(() => {
         if (roles && roles.length > 0)
             setRoleCheckboxs(roles);
@@ -82,7 +82,7 @@ function PermissionPage() {
                 })
             });
             return initial;
-        }, { roles: [] } as BulkRoleUpdateRequest);
+        }, { roles: [] } as UpdateBulkRoleType);
 
         for (let i = 0; i < roles.length; i++) {
             roleCheckboxs[i].grantedPermissions?.map(item => {

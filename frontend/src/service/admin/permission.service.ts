@@ -1,10 +1,9 @@
 import { get, put } from "@/lib/api.lib";
-import { BulkRoleUpdateRequest } from "@/types";
-import { ListPermissionResponse } from "@/types/response/permission.response";
+import { PermissionGroupResponse, UpdateBulkRoleType } from "@/types";
 
 const getAllByGroup = async () =>
-    await get<ListPermissionResponse>("api/app/permission/by-group?culture=en");
+    await get<PermissionGroupResponse>("api/app/permission/by-group?culture=en");
 
-const updatePermission = async (data: BulkRoleUpdateRequest) =>
+const updatePermission = async (data: UpdateBulkRoleType) =>
     await put<any>("api/app/permission", data);
 export { getAllByGroup, updatePermission };

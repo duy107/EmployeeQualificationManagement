@@ -1,10 +1,9 @@
 "use client"
-import React from "react";
 import { PermissionNodeResponse, RoleResponse } from "@/types";
 
 export const renderPermissionRows = (
     permissions: PermissionNodeResponse[] = [],
-    roles: RoleResponse = [],
+    roles: RoleResponse[] = [],
     colSpan: number,
     level: number,
     handleToggleCheckox: (roleId: string, permissionName: string, isChecked: boolean) => void

@@ -1,4 +1,10 @@
-import { TypeRequest } from "../utils.type";
+import { UpdatePermissionType } from "./permission.request";
 
-export type BulkRoleUpdateRequest = TypeRequest<"Gosei.EmployeeQualificationManagement.Dtos.Roles.Role.BulkRoleUpdateRequest">;
-export type RoleUpdateRequest = TypeRequest<"Gosei.EmployeeQualificationManagement.Dtos.Roles.Role.RoleUpdateRequest">;
+export type UpdateBulkRoleType = {
+    roles: UpdateRoleType[]
+}
+
+export type UpdateRoleType = {
+    name: string,
+    permissions: UpdatePermissionType[]
+}

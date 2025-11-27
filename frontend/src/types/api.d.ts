@@ -1354,208 +1354,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/app/employee": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    SearchKey?: string;
-                    Filters?: components["schemas"]["Gosei.EmployeeQualificationManagement.Commons.ExpressionFilter"][];
-                    Sorting?: string;
-                    SkipCount?: number;
-                    MaxResultCount?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Application.Dtos.PagedResultDto`1[[Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse, Gosei.EmployeeQualificationManagement.Application.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"];
-                        "application/json": components["schemas"]["Volo.Abp.Application.Dtos.PagedResultDto`1[[Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse, Gosei.EmployeeQualificationManagement.Application.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"];
-                        "text/json": components["schemas"]["Volo.Abp.Application.Dtos.PagedResultDto`1[[Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse, Gosei.EmployeeQualificationManagement.Application.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Forbidden */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Internal Server Error */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Not Implemented */
-                501: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeRequest"];
-                    "text/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeRequest"];
-                    "application/*+json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse"];
-                        "application/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse"];
-                        "text/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Forbidden */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Internal Server Error */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-                /** @description Not Implemented */
-                501: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/app/employee/{id}": {
         parameters: {
             query?: never;
@@ -1836,6 +1634,208 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/app/employee": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    SearchKey?: string;
+                    Filters?: components["schemas"]["Gosei.EmployeeQualificationManagement.Commons.ExpressionFilter"][];
+                    Sorting?: string;
+                    SkipCount?: number;
+                    MaxResultCount?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Application.Dtos.PagedResultDto`1[[Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse, Gosei.EmployeeQualificationManagement.Application.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"];
+                        "application/json": components["schemas"]["Volo.Abp.Application.Dtos.PagedResultDto`1[[Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse, Gosei.EmployeeQualificationManagement.Application.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"];
+                        "text/json": components["schemas"]["Volo.Abp.Application.Dtos.PagedResultDto`1[[Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse, Gosei.EmployeeQualificationManagement.Application.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Forbidden */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Not Implemented */
+                501: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeRequest"];
+                    "text/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeRequest"];
+                    "application/*+json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse"];
+                        "application/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse"];
+                        "text/json": components["schemas"]["Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee.EmployeeResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Forbidden */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+                /** @description Not Implemented */
+                501: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "application/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                        "text/json": components["schemas"]["Volo.Abp.Http.RemoteServiceErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -7428,7 +7428,8 @@ export interface components {
             middleName?: string | null;
             lastName?: string | null;
             gender?: string | null;
-            birthDate?: string | null;
+            /** Format: date-time */
+            birthDate?: string;
             email?: string | null;
             note?: string | null;
         };
@@ -7437,8 +7438,10 @@ export interface components {
             id?: string;
             institution?: string | null;
             city?: string | null;
-            validFrom?: string | null;
-            validTo?: string | null;
+            /** Format: date-time */
+            validFrom?: string;
+            /** Format: date-time */
+            validTo?: string;
             qualificationName?: string | null;
         };
         "Gosei.EmployeeQualificationManagement.Dtos.Employees.Qualification.EmployeeQualificationRequest": {

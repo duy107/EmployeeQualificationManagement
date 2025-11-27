@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gosei.EmployeeQualificationManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial_db : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -446,6 +446,37 @@ namespace Gosei.EmployeeQualificationManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppEmployees",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppEmployees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppQualifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppQualifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenIddictApplications",
                 columns: table => new
                 {
@@ -759,6 +790,36 @@ namespace Gosei.EmployeeQualificationManagement.Migrations
                         name: "FK_AbpUserTokens_AbpUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppEmployeeQualifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Institution = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    QualificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppEmployeeQualifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppEmployeeQualifications_AppEmployees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AppEmployees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppEmployeeQualifications_AppQualifications_QualificationId",
+                        column: x => x.QualificationId,
+                        principalTable: "AppQualifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1079,6 +1140,23 @@ namespace Gosei.EmployeeQualificationManagement.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppEmployeeQualifications_EmployeeId",
+                table: "AppEmployeeQualifications",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppEmployeeQualifications_QualificationId",
+                table: "AppEmployeeQualifications",
+                column: "QualificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppQualifications_Code",
+                table: "AppQualifications",
+                column: "Code",
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
                 column: "ClientId");
@@ -1191,6 +1269,9 @@ namespace Gosei.EmployeeQualificationManagement.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
+                name: "AppEmployeeQualifications");
+
+            migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
             migrationBuilder.DropTable(
@@ -1213,6 +1294,12 @@ namespace Gosei.EmployeeQualificationManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUsers");
+
+            migrationBuilder.DropTable(
+                name: "AppEmployees");
+
+            migrationBuilder.DropTable(
+                name: "AppQualifications");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictAuthorizations");

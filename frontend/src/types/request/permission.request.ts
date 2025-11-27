@@ -1,3 +1,4 @@
-import { TypeRequest } from "../utils.type";
-
-export type PermissionUpdateRequest = TypeRequest<"Gosei.EmployeeQualificationManagement.Dtos.Roles.Permission.PermissionUpdateRequest">;
+export type UpdatePermissionType = {
+    name: string,
+    isGranted: boolean
+}

@@ -1,5 +1,5 @@
 import { del, get, post, put } from "@/lib/api.lib";
-import { EmployeePaginatedRequest, EmployeePaginatedResponse, EmployeeRequest, EmployeeResponse } from "@/types";
+import { EmployeePaginatedRequest, EmployeePaginatedResponse, EmployeeResponse, UpsertEmployeeType } from "@/types";
 
 const getPaginatedEmployee = async (data: EmployeePaginatedRequest) => {
     const skipCount = (data.pageNumber - 1) * data.pageSize;
@@ -10,13 +10,14 @@ const getPaginatedEmployee = async (data: EmployeePaginatedRequest) => {
 const getById = async (id: string) =>
  await get<EmployeeResponse>(`api/app/employee/${id}`);
 
-const createEmployee = async (data: EmployeeRequest) =>
+const createEmployee = async (data: UpsertEmployeeType) =>
     await post<EmployeeResponse>("api/app/employee", data);
 
-const updateEmployee = async (id: string, data: EmployeeRequest) =>
+const updateEmployee = async (id: string, data: UpsertEmployeeType) =>
     await put<EmployeeResponse>(`api/app/employee/${id}`, data);
 
 const deleteEmployee = async (employeeId: string) =>
     await del<any>(`api/app/employee/${employeeId}`);
 
 export { createEmployee, deleteEmployee, getById, getPaginatedEmployee, updateEmployee };
+
