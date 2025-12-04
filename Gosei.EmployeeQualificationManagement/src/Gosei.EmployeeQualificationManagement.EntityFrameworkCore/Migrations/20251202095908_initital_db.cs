@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gosei.EmployeeQualificationManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class initial_db : Migration
+    public partial class initital_db : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

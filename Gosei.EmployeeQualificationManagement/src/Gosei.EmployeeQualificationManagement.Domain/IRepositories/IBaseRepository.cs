@@ -14,6 +14,5 @@ namespace Gosei.EmployeeQualificationManagement.IRepositories
         where TEntity : class, IEntity<TKey>
     {
         Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken, params Expression<Func<TEntity, object>>[] includeExpressions);
-        IQueryable<TEntity> WithDetails(IQueryable<TEntity> query, List<Expression<Func<TEntity, object>>> includeExpressions);
     }
 }

@@ -17,13 +17,11 @@ namespace Gosei.EmployeeQualificationManagement.Employees
 
         public virtual IdentityUser User { get; set; }
 
-        // EmployeeQualifications
         private readonly List<EmployeeQualification> _employeeQualifications = new();
         public IReadOnlyCollection<EmployeeQualification> EmployeeQualifications => _employeeQualifications.AsReadOnly();
         protected Employee() { }
 
-        public Employee (Guid id, string firstName, string? middleName, string lastName, string? gender, DateTime birthDate, string email, string? note)
-            : base(id)
+        public Employee (Guid id, string firstName, string? middleName, string lastName, string? gender, DateTime birthDate, string email, string? note) : base (id)
         {
             FirstName = firstName;
             MiddleName = middleName;
@@ -34,9 +32,10 @@ namespace Gosei.EmployeeQualificationManagement.Employees
             Note = note;
         }
 
-        public void AddQualification(EmployeeQualification qualification)
+        public void AddQualification(Qualification qualification, string institution, DateTime? validFrom, DateTime? validTo, string? city, string? note)
         {
-            _employeeQualifications.Add(qualification);
+            EmployeeQualification employeeQualification = new EmployeeQualification(qualification, institution, validFrom, validTo, city, note);
+            _employeeQualifications.Add(employeeQualification);
         }
     }
 }

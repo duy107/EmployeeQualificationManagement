@@ -12,7 +12,6 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
     public class QualificationDataSeederContributor(IRepository<Qualification, Guid> qualificationRepository, IGuidGenerator guidGenerator) : ITransientDependency
     {
         private readonly IRepository<Qualification, Guid> _qualificationRepository = qualificationRepository;
-        private readonly IGuidGenerator _guidGenerator = guidGenerator;
 
         public async Task SeedAsync(DataSeedContext context)
         {
@@ -44,7 +43,7 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
             List<Qualification> data = new();
             foreach (var item in qualifications)
             {
-                data.Add(new Qualification(_guidGenerator.Create(), item.Name, item.Code)); 
+                data.Add(new Qualification(item.Name, item.Code)); 
             }
             await _qualificationRepository.InsertManyAsync(data, autoSave: true);
         }

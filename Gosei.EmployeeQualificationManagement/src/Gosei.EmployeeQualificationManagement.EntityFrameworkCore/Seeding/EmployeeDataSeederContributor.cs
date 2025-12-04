@@ -32,14 +32,14 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
             
             if (await _employeeRepository.CountAsync() > 0)
                 return;
-            var qMap = new Dictionary<string, Guid>();
+            var qMap = new Dictionary<string, Qualification>();
            
             try
             {
-                qMap.Add("BD", (await _qualificationRepository.GetAsync(q => q.Code == "BD")).Id);
-                qMap.Add("D", (await _qualificationRepository.GetAsync(q => q.Code == "D")).Id);
-                qMap.Add("Q3", (await _qualificationRepository.GetAsync(q => q.Code == "Q3")).Id);
-                qMap.Add("Q4", (await _qualificationRepository.GetAsync(q => q.Code == "Q4")).Id);
+                qMap.Add("BD", (await _qualificationRepository.GetAsync(q => q.Code == "BD")));
+                qMap.Add("D", (await _qualificationRepository.GetAsync(q => q.Code == "D")));
+                qMap.Add("Q3", (await _qualificationRepository.GetAsync(q => q.Code == "Q3")));
+                qMap.Add("Q4", (await _qualificationRepository.GetAsync(q => q.Code == "Q4")));
             }
             catch(Exception ex)
             {
@@ -76,33 +76,21 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
                 (await _userManager.AddToRoleAsync(user, roleName)).CheckErrors();
 
                 Employee employee = new Employee(user.Id, firstName, middleName, lastName, gender, birthDate, email, note);
-                if (i == 1) employee.AddQualification(CreateQualLink(qMap["BD"], "Test Institution 1", "Hanoi"));
-                else if (i == 2) employee.AddQualification(CreateQualLink(qMap["D"], "Test Institution 2", "Hanoi"));
-                else if (i == 3) employee.AddQualification(CreateQualLink(qMap["Q3"], "Test Institution 3", "Hanoi"));
-                else if (i == 4) employee.AddQualification(CreateQualLink(qMap["Q4"], "Test Institution 4", "Hanoi"));
-                else if (i == 5) employee.AddQualification(CreateQualLink(qMap["BD"], "Test Institution 5", "HCM City"));
-                else if (i == 6) employee.AddQualification(CreateQualLink(qMap["D"], "Test Institution 6", "HCM City"));
-                else if (i == 7) employee.AddQualification(CreateQualLink(qMap["Q3"], "Test Institution 7", "HCM City"));
-                else if (i == 8) employee.AddQualification(CreateQualLink(qMap["Q4"], "Test Institution 8", "HCM City"));
-                else if (i == 9) employee.AddQualification(CreateQualLink(qMap["BD"], "Test Institution 9", "HCM City"));
-                else if (i == 10) employee.AddQualification(CreateQualLink(qMap["D"], "Test Institution 10", "HCM City"));
                 
+                if (i == 1) employee.AddQualification(qMap["BD"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 2) employee.AddQualification(qMap["D"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 3) employee.AddQualification(qMap["Q3"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 4) employee.AddQualification(qMap["Q4"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 5) employee.AddQualification(qMap["BD"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 6) employee.AddQualification(qMap["D"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 7) employee.AddQualification(qMap["D"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 8) employee.AddQualification(qMap["D"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 9) employee.AddQualification(qMap["Q3"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                else if (i == 10) employee.AddQualification(qMap["Q4"], "Test Institution 1", new DateTime(2025, 10, 10), new DateTime(2026, 10, 10), null, null);
+                
+                await _employeeRepository.InsertAsync(employee, autoSave: true);
                 employees.Add(employee);
             }
-            await _employeeRepository.InsertManyAsync(employees, autoSave: true);
-        }
-
-        private EmployeeQualification CreateQualLink(Guid qualId, string institution, string city)
-        {
-            return new EmployeeQualification(_guidGenerator.Create())
-            {
-                QualificationId = qualId,
-                Institution = institution,
-                City = city,
-                ValidFrom = new DateTime(2012, 6, 30),
-                ValidTo = new DateTime(2020, 6, 30),
-                Note = "Test Note"
-            };
         }
     }
 }

@@ -1,5 +1,3 @@
-import { TypeResponse } from "../utils.type";
-
 export type RoleResponse = {
     id?: string,
     name: string,

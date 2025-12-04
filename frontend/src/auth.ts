@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { login } from "@/service/auth.service";
 import { jwtDecode } from "jwt-decode";
 import NextAuth from "next-auth";
@@ -6,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 
 interface JwtPayload {
     exp: number,
-    [key: string]: any
+    [key: string]: unknown
 }
 
 const options = (isRefreshToken: boolean = true) => {
@@ -33,6 +35,7 @@ async function refreshToken(token?: { refresh_token: string }) {
             }
         }
     } catch (e) {
+        console.error("Error refreshing token:", e);
         return {
             ...token
         }
@@ -68,6 +71,7 @@ export const {
                         };
                     }
                     return null;
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 } catch (err) {
                     return null;
                 }

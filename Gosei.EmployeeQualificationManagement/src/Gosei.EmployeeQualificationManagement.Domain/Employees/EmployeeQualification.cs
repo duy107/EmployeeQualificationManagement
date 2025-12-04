@@ -10,14 +10,21 @@ namespace Gosei.EmployeeQualificationManagement.Employees
         public DateTime? ValidTo { get; set; }
         public string? City { get; set; }
         public string? Note { get; set; }
-        // employee
         public Guid? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
-        // qualification
         public Guid QualificationId { get; set; }
         public Qualification Qualification { get; set; }
 
-        public EmployeeQualification(Guid id) : base(id) { }
         protected EmployeeQualification() { }
+
+        public EmployeeQualification(Qualification qualification, string institution, DateTime? validFrom, DateTime? validTo, string? city, string? note)
+        {
+            Qualification = qualification;
+            Institution = institution;
+            ValidFrom = validFrom;
+            ValidTo = validTo;
+            City = city;
+            Note = note;
+        }
     }
 }

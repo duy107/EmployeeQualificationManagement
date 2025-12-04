@@ -11,4 +11,5 @@ namespace Gosei.EmployeeQualificationManagement.Dtos.Roles.Role
         public bool IsStatic { get; set; }
         public List<string> GrantedPermissions { get; set; } = new();
     }
+
 }

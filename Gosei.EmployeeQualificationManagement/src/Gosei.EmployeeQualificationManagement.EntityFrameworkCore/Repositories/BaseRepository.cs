@@ -23,12 +23,5 @@ namespace Gosei.EmployeeQualificationManagement.Repositories
                 query = includeExpressions.Aggregate(query, (current, item) => current.Include(item));
             return await query.FirstOrDefaultAsync(item => item.Id.Equals(id), cancellationToken);
         }
-
-        public IQueryable<TEntity> WithDetails(IQueryable<TEntity> query, List<Expression<Func<TEntity, object>>> includeExpressions)
-        {
-            if (includeExpressions.Count() > 0 && includeExpressions.Any())
-                query = includeExpressions.Aggregate(query, (current, item) => current.Include(item));
-            return query;
-        }
     }
 }

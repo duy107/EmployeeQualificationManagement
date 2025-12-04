@@ -12,9 +12,11 @@ export const notification = (mess: string, type: "error" | "success" = "error") 
   });
 }
 
-export const removeEmptyStrings = (obj: any): any => {
+export const removeEmptyStrings = (obj: Record<string, unknown>): Record<string, unknown> => {
   for (const key in obj) {
-    obj[key] === "" && delete obj[key];
+    if (obj[key] === "") {
+      delete obj[key];
+    }
   }
   return obj;
 };

@@ -13,7 +13,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { HttpError } from '@/lib/api.lib';
 import { notification, removeEmptyStrings } from '@/lib/utils';
 import { create } from '@/service/admin/employeeQualification.service';
 import { useQualificationStore } from '@/store/useQualificationStore';
@@ -25,7 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ChevronDownIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface AddQualificationModalProps {
@@ -39,7 +38,20 @@ export default function AddQualificationModal({
     open,
     onClose
 }: AddQualificationModalProps) {
+
+    const [openValidFrom, setOpenValidForm] = useState<boolean>(false);
+    const [openValidTo, setOpenValidTo] = useState<boolean>(false);
+
     const { qualifications, fetchQualifications } = useQualificationStore();
+     const initForm = useMemo(() => ({
+        employeeId,
+        qualificationId: qualifications[0]?.id ?? "",
+        institution: '',
+        city: undefined,
+        validFrom: undefined,
+        validTo: undefined,
+    }), [employeeId, qualifications]);
+
     const queryClient = useQueryClient();
     const { mutate } = useMutation({
         mutationFn: async (data: CreateEmployeeQualificationType) => await create(data),
@@ -54,38 +66,30 @@ export default function AddQualificationModal({
             };
         },
         onError: (error) => {
-            if (error instanceof HttpError) return;
             notification(error.message);
         }
     });
-    const initForm = {
-        employeeId,
-        qualificationId: qualifications[0]?.id ?? "",
-        institution: '',
-        city: undefined,
-        validFrom: undefined,
-        validTo: undefined,
-    };
-    
+
     const form = useForm<CreateEmployeeQualificationType>({
         resolver: zodResolver(createEmployeeQualificationSchema),
         defaultValues: initForm
     });
     const { control, handleSubmit, reset, clearErrors } = form;
+
     useEffect(() => {
         if (open && qualifications.length === 0) {
             fetchQualifications();
         }
-    }, [open, qualifications.length, fetchQualifications]);
+    }, [fetchQualifications, open, qualifications.length]);
 
     useEffect(() => {
         if (open) {
             reset(initForm);
         }
-    }, [open, qualifications, employeeId, reset]);
+    }, [open, reset, initForm]);
 
     const onSubmit = async (data: CreateEmployeeQualificationType) => {
-        const cleanedData = removeEmptyStrings(data);
+        const cleanedData = removeEmptyStrings(data) as CreateEmployeeQualificationType;
         mutate(cleanedData);
     }
 
@@ -94,6 +98,7 @@ export default function AddQualificationModal({
         onClose();
         reset(initForm)
     }
+    
     return (
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-md bg-white rounded-lg shadow-lg">
@@ -162,12 +167,11 @@ export default function AddQualificationModal({
                                     control={control}
                                     name="validFrom"
                                     render={({ field }) => {
-                                        const [open, setOpen] = useState(false);
                                         const dateValue = field.value ? format(field.value, "dd/MM/yyyy") : undefined;
                                         return <FormItem>
                                             <FormLabel>ValidFrom</FormLabel>
                                             <FormControl>
-                                                <Popover open={open} onOpenChange={setOpen}>
+                                                <Popover open={openValidFrom} onOpenChange={setOpenValidForm}>
                                                     <PopoverTrigger asChild>
                                                         <Button
                                                             variant="outline"
@@ -186,7 +190,7 @@ export default function AddQualificationModal({
                                                             captionLayout="dropdown"
                                                             onSelect={(date) => {
                                                                 field.onChange(date)
-                                                                setOpen(false)
+                                                                setOpenValidForm(false)
                                                             }}
                                                         />
                                                     </PopoverContent>
@@ -201,11 +205,10 @@ export default function AddQualificationModal({
                                     name="validTo"
                                     render={({ field }) => {
                                         const dateValue = field.value ? format(field.value, "dd/MM/yyyy") : undefined;
-                                        const [open, setOpen] = useState(false);
                                         return <FormItem>
                                             <FormLabel>ValidFrom</FormLabel>
                                             <FormControl>
-                                                <Popover open={open} onOpenChange={setOpen}>
+                                                <Popover open={openValidTo} onOpenChange={setOpenValidTo}>
                                                     <PopoverTrigger asChild>
                                                         <Button
                                                             variant="outline"
@@ -224,7 +227,7 @@ export default function AddQualificationModal({
                                                             captionLayout="dropdown"
                                                             onSelect={(date) => {
                                                                 field.onChange(date)
-                                                                setOpen(false)
+                                                                setOpenValidTo(false)
                                                             }}
                                                         />
                                                     </PopoverContent>

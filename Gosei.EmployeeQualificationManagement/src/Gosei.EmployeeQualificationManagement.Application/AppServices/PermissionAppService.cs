@@ -1,28 +1,35 @@
-﻿using Gosei.EmployeeQualificationManagement.Dtos.Roles.Permission;
+﻿using Gosei.EmployeeQualificationManagement.Constants.Cache;
+using Gosei.EmployeeQualificationManagement.Constants.Roles;
+using Gosei.EmployeeQualificationManagement.Dtos.Roles.Permission;
 using Gosei.EmployeeQualificationManagement.Dtos.Roles.Role;
 using Gosei.EmployeeQualificationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement;
-
+    
 namespace Gosei.EmployeeQualificationManagement.AppServices
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = RoleConstant.Admin)]
     public class PermissionAppService : ApplicationService
     {
         private readonly IPermissionDefinitionManager _permissionDefinitionManager;
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
         private readonly IPermissionManager _permissionManager;
-        public PermissionAppService(IPermissionDefinitionManager permissionDefinitionManager, IStringLocalizerFactory stringLocalizerFactory, IPermissionManager permissionManager)
+        private readonly IDistributedCache<List<RoleResponse>, string> _rolesCache;
+
+        public PermissionAppService(IPermissionDefinitionManager permissionDefinitionManager, IStringLocalizerFactory stringLocalizerFactory, IPermissionManager permissionManager, IDistributedCache<List<RoleResponse>, string> rolesCache)
         {
             _permissionDefinitionManager = permissionDefinitionManager;
             _stringLocalizerFactory = stringLocalizerFactory;
             _permissionManager = permissionManager;
+            _rolesCache = rolesCache;
         }
 
         public async Task<PermissionGroupResponse> GetByGroupAsync()
@@ -39,6 +46,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             groupResponse.Permissions = group.Permissions.Select(MapPermissionToResponse).ToList();
             return groupResponse;
         }
+
         public async Task UpdateAsync(BulkRoleUpdateRequest request)
         {
             foreach (RoleUpdateRequest role in request.Roles)
@@ -52,7 +60,9 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
                     );
                 }
             }
+            await _rolesCache.RemoveAsync(CacheKey.Roles.AllWithMappedPermissions);
         }
+
         private PermissionDefinitionResponse MapPermissionToResponse(PermissionDefinition permission)
         {
             var permissionDefinitionResponse = new PermissionDefinitionResponse
@@ -63,10 +73,13 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
             };
             return permissionDefinitionResponse;
         }
+
         private string GetLocalizedString(ILocalizableString localizable)
         {
             if (localizable == null)
+            {
                 return string.Empty;
+            }
 
             var localized = localizable.Localize(_stringLocalizerFactory);
             return localized.Value; 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "gen:api": "openapi-typescript http://localhost:5100/swagger/v1/swagger.json --output src/types/api.d.ts",
+    "generate": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 openapi-ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -23,6 +23,7 @@
     "@tanstack/react-query": "^5.90.9",
     "antd": "^5.28.1",
     "autoprefixer": "^10.4.21",
+    "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -44,11 +45,13 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "^0.88.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "openapi-typescript": "^7.10.1",

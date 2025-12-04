@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Gosei.EmployeeQualificationManagement.Migrations
 {
     [DbContext(typeof(EmployeeQualificationManagementDbContext))]
-    [Migration("20251127024523_initial_db")]
-    partial class initial_db
+    [Migration("20251202095908_initital_db")]
+    partial class initital_db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

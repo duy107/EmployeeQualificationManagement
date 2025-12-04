@@ -34,9 +34,9 @@ export default function LoginPage() {
       if (res?.code)
         return notification("Incorrect or no access account!");
       if (res?.ok) {
-        route.push("/admin/employee");
+        route.replace("/admin/employee");
       }
-    } catch (e) {
+    } catch {
       notification("An unexpected error occurred. Please try again.");
     }
   }

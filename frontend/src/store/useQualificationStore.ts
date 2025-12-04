@@ -25,7 +25,7 @@ export const useQualificationStore = create<QualificationStore>((set, get) => ({
         notification("Không lấy được danh sách quyền!");
       }
     } catch (err) {
-      notification("Lỗi khi tải danh sách quyền!");
+      notification(err as string);
     } finally {
       set({ loading: false });
     }

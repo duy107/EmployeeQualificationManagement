@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { JSONValue } from "next/dist/server/config-shared";
 import type { Configuration as WebpackConfig } from 'webpack';
 
 const svgoConfig: Record<string, unknown> = {
@@ -44,7 +45,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     rules: {
       '*.svg': {
-        loaders: [{ loader: '@svgr/webpack', options: { svgoConfig: svgoConfig as any } }],
+        loaders: [{ loader: '@svgr/webpack', options: { svgoConfig: svgoConfig as JSONValue } }],
         as: '*.js',
       },
     },
@@ -52,7 +53,7 @@ const nextConfig: NextConfig = {
   webpack(config: WebpackConfig) {
     config.module!.rules!.push({
       test: /\.svg$/i,
-      use: { loader: '@svgr/webpack', options: { svgoConfig: svgoConfig as any } },
+      use: { loader: '@svgr/webpack', options: { svgoConfig: svgoConfig as unknown } },
     });
 
     // https://github.com/vercel/next.js/issues/43567

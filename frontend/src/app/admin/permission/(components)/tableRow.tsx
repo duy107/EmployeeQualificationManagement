@@ -1,7 +1,9 @@
 "use client"
+import { Input, TableCell, TableRow } from "@/components/ui";
 import { PermissionNodeResponse, RoleResponse } from "@/types";
+import { JSX } from "react";
 
-export const renderPermissionRows = (
+export const permissionTableRow = (
     permissions: PermissionNodeResponse[] = [],
     roles: RoleResponse[] = [],
     colSpan: number,
@@ -16,8 +18,8 @@ export const renderPermissionRows = (
         };
 
         const currentRow = (
-            <tr key={perm.name} className={hasChildren ? 'bg-gray-200 font-semibold' : 'hover:bg-gray-50'}>
-                <td
+            <TableRow key={perm.name} className={hasChildren ? 'bg-gray-200 font-semibold' : 'hover:bg-gray-50'}>
+                <TableCell
                     className="border border-gray-300 py-2 text-sm whitespace-nowrap"
                     colSpan={1}
                     style={indentationStyle}
@@ -26,41 +28,41 @@ export const renderPermissionRows = (
                         ? <span className="text-teal-700">{perm.displayName}</span>
                         : <span>{perm.displayName}</span>
                     }
-                </td>
+                </TableCell>
 
                 {roles.map(role => {
                     const isChecked = role.grantedPermissions?.includes(perm.name || "") ?? false;
                     if (hasChildren) {
                         return (
-                            <td key={`${role.id}-${perm.name}-parent`} className="border border-gray-300 text-center">
-                                <input
+                            <TableCell key={`${role.id}-${perm.name}-parent`} className="border border-gray-300 text-center">
+                                <Input
                                     type="checkbox"
                                     onClick={(e) => handleToggleCheckox(role.id || "", perm.name || "", e.currentTarget.checked)}
                                     checked={isChecked}
                                     readOnly
                                     className="hover:cursor-default w-4 h-4 text-cyan-600 border-gray-300 rounded"
                                 />
-                            </td>
+                            </TableCell>
                         );
                     } else {
                         return (
-                            <td key={`${role.id}-${perm.name}`} className="border border-gray-300 text-center">
-                                <input
+                            <TableCell key={`${role.id}-${perm.name}`} className="border border-gray-300 text-center">
+                                <Input
                                     onClick={(e) => handleToggleCheckox(role.id || "", perm.name || "", e.currentTarget.checked)}
                                     type="checkbox"
                                     checked={isChecked}
                                     readOnly
                                     className="hover:cursor-pointer w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500"
                                 />
-                            </td>
+                            </TableCell>
                         );
                     }
                 })}
-            </tr>
+            </TableRow>
         );
 
-        const childrenRows: any = hasChildren
-            ? renderPermissionRows(perm.children || [], roles, colSpan, level + 1, handleToggleCheckox)
+        const childrenRows: JSX.Element[] = hasChildren
+            ? permissionTableRow(perm.children || [], roles, colSpan, level + 1, handleToggleCheckox)
             : [];
         return [currentRow, ...childrenRows];
     });

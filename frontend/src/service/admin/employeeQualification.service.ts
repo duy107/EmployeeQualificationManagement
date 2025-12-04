@@ -1,5 +1,5 @@
 import { get, post } from "@/lib/api.lib";
-import { CreateEmployeeQualificationType, EmployeeQualificationPaginatedResponse, EmployeeQualificationResponse, QualificationPaginatedRequest, QualificationPaginatedResponse } from "@/types";
+import { CreateEmployeeQualificationType, EmployeeQualificationPaginatedResponse, EmployeeQualificationResponse, QualificationPaginatedRequest } from "@/types";
 
 
 const getPaginatedEmployeeQualification = async (data: QualificationPaginatedRequest) => {
