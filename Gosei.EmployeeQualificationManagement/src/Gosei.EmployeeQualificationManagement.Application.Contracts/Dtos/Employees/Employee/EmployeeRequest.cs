@@ -1,8 +1,9 @@
 ﻿using System;
+using Volo.Abp.Domain.Entities;
 
 namespace Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee
 {
-    public class EmployeeRequest
+    public class EmployeeRequest : IHasConcurrencyStamp
     {
         public string FirstName { get; set; }
         public string? MiddleName { get; set; }
@@ -10,5 +11,6 @@ namespace Gosei.EmployeeQualificationManagement.Dtos.Employees.Employee
         public DateTime BirthDate { get; set; }
         public string? Gender { get; set; }
         public string? Note { get; set; }
+        public string ConcurrencyStamp { get; set; } = string.Empty;
     }
 }

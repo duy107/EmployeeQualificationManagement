@@ -106,6 +106,9 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
                     (await _userManagement.SetEmailAsync(user, newEmail)).CheckErrors();
                     employee.Email = newEmail;
                 }
+
+                employee.ConcurrencyStamp = input.ConcurrencyStamp;
+
                 ObjectMapper.Map(input, employee);
 
                 (await _userManagement.UpdateAsync(user)).CheckErrors();
@@ -115,7 +118,7 @@ namespace Gosei.EmployeeQualificationManagement.AppServices
                 return ObjectMapper.Map<Employee, EmployeeResponse>(employee);
             });
         }
-
+  
         [Authorize(PermissionConstant.Employees.Delete)]
         public override async Task DeleteAsync(Guid id)
         {

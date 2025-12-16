@@ -21,6 +21,7 @@ namespace Gosei.EmployeeQualificationManagement.Seeding
                 await _roleManagement.CreateAsync(employee);
             }
         }
+
         private async Task<IdentityRole?> FindRoleByName(string roleName)
                 => await _roleManagement.FindByNameAsync(roleName);
     }

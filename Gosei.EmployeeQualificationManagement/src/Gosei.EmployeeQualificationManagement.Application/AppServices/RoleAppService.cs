@@ -14,16 +14,19 @@ using Volo.Abp.PermissionManagement;
 
 namespace Gosei.EmployeeQualificationManagement.AppServices
 {
-    public class RoleAppService(
-        IIdentityRoleRepository roleRepository,
-        IPermissionGrantRepository permissionGrantRepository,
-        IDistributedCache<List<RoleResponse>, string> rolesCache
-        ) : ApplicationService
+    public class RoleAppService: ApplicationService
     {
 
-        private readonly IIdentityRoleRepository _roleRepository = roleRepository;
-        private readonly IPermissionGrantRepository _permissionGrantRepository = permissionGrantRepository;
-        private readonly IDistributedCache<List<RoleResponse>, string> _rolesCache = rolesCache;
+        private readonly IIdentityRoleRepository _roleRepository;
+        private readonly IPermissionGrantRepository _permissionGrantRepository;
+        private readonly IDistributedCache<List<RoleResponse>, string> _rolesCache;
+
+        public RoleAppService(IIdentityRoleRepository roleRepository, IPermissionGrantRepository permissionGrantRepository, IDistributedCache<List<RoleResponse>, string> rolesCache)
+        {
+            _permissionGrantRepository = permissionGrantRepository;
+            _roleRepository = roleRepository;
+            _rolesCache = rolesCache;
+        }
 
         [Authorize]
         public async Task<List<RoleResponse>> GetWithPermissionsAsync()

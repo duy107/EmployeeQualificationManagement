@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Gosei.EmployeeQualificationManagement.Migrations
 {
     [DbContext(typeof(EmployeeQualificationManagementDbContext))]
-    [Migration("20251202095908_initital_db")]
+    [Migration("20251205041419_initital_db")]
     partial class initital_db
     {
         /// <inheritdoc />
@@ -35,10 +35,22 @@ namespace Gosei.EmployeeQualificationManagement.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

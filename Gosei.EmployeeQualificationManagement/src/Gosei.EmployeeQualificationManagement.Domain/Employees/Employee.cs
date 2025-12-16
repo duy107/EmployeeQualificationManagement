@@ -5,7 +5,7 @@ using Volo.Abp.Identity;
 
 namespace Gosei.EmployeeQualificationManagement.Employees
 {
-    public class Employee : Entity<Guid>
+    public class Employee : AggregateRoot<Guid>
     {
         public string FirstName { get; set; }
         public string? MiddleName { get; set; }
@@ -19,6 +19,7 @@ namespace Gosei.EmployeeQualificationManagement.Employees
 
         private readonly List<EmployeeQualification> _employeeQualifications = new();
         public IReadOnlyCollection<EmployeeQualification> EmployeeQualifications => _employeeQualifications.AsReadOnly();
+
         protected Employee() { }
 
         public Employee (Guid id, string firstName, string? middleName, string lastName, string? gender, DateTime birthDate, string email, string? note) : base (id)
