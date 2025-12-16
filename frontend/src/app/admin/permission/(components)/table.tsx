@@ -1,6 +1,7 @@
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui";
+
 import { PermissionNodeResponse, RoleResponse } from "@/types";
-import { permissionTableRow } from "./tableRow";
+import { PermissionTableRow } from "./table-row";
 
 interface PermissionTableProps {
     permissions: PermissionNodeResponse[],
@@ -32,7 +33,13 @@ function PermissionTable({ permissions, roleCheckboxs, handleToggleCheckox }: Pe
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {permissionTableRow(permissions, roleCheckboxs, totalColumns, 0, handleToggleCheckox)}
+                <PermissionTableRow
+                    permissions={permissions}
+                    roles={roleCheckboxs}
+                    colSpan={totalColumns}
+                    level={0}
+                    handleToggleCheckox={handleToggleCheckox}
+                />
             </TableBody>
         </Table>
     );

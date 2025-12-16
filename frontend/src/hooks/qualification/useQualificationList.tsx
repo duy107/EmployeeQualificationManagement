@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+
 import { getPaginatedEmployeeQualification } from "@/service/admin/employeeQualification.service";
 import { QualificationPaginatedRequest } from "@/types";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 
 const PAGE_SIZE = 5;
 
@@ -13,6 +15,7 @@ export const useQualificationList = ( employeeId: string) => {
             pageSize: PAGE_SIZE,
             employeeId
         });
+        
     const {
         data,
         isError,

@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { login } from "@/service/auth.service";
-import { jwtDecode } from "jwt-decode";
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+
 import { v4 as uuidv4 } from "uuid";
+import { jwtDecode } from "jwt-decode";
+
+import CredentialsProvider from "next-auth/providers/credentials";
+import { login } from "@/service/auth.service";
 
 interface JwtPayload {
     exp: number,

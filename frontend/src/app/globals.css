@@ -122,6 +122,7 @@
     /* Removed invalid outline-ring/50 class */
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -131,7 +132,25 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* close button toaster */
+[data-sonner-toast][data-styled=true] [data-close-button] {
+  left: auto !important;
+  right: 0 !important;
+  transform: translate(50%, -50%) !important;
+  color: #FB2C36 !important;
+  background-color: #FEE4E5 !important;
+  border: none !important;
+  transition: all 0.2s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+[data-sonner-toast][data-styled=true] [data-close-button]:hover {
+  background-color: #fb4952bd !important;
+  color: #ffffff !important;
 }

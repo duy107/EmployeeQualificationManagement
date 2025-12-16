@@ -7,7 +7,6 @@ const permissionToPathMap: { [key: string]: string } = {
     "EmployeeQualificationManagement.Roles": "/admin/role"
 }
 
-
 export const getPermissionToPathMap = async () => {
 
     const res = await getAll();

@@ -1,11 +1,12 @@
 "use client"
 
-import { getById, getPaginatedEmployee } from "@/service/admin/employee.service";
-import { EmployeePaginatedRequest, EmployeeResponse } from "@/types";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+
+import { getPaginatedEmployee } from "@/service/admin/employee.service";
+import { EmployeePaginatedRequest } from "@/types";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const PAGE_SIZE = 5;
 
@@ -72,24 +73,24 @@ export const useEmployeeList = () => {
         }
     }, [isError, error, router]);
 
-    const handleHover = (employeeId: string) => {
+    // const handleHover = (employeeId: string) => {
 
-        queryClient.prefetchQuery({
-            queryKey: ["employee", employeeId],
-            queryFn: async () => {
-                const res = await getById(employeeId);
-                if (res.status === 200) {
-                    const emp = res.data as EmployeeResponse;
-                    const cleanedDate = {
-                        ...emp,
-                        birthDate: emp.birthDate ? new Date(emp.birthDate) : new Date(1990, 1, 1)
-                    } as EmployeeResponse;
-                    return cleanedDate;
-                }
-            },
-            staleTime: 60 * 1000
-        });
-    };
+    //     queryClient.prefetchQuery({
+    //         queryKey: ["employee", employeeId],
+    //         queryFn: async () => {
+    //             const res = await getById(employeeId);
+    //             if (res.status === 200) {
+    //                 const emp = res.data as EmployeeResponse;
+    //                 const cleanedDate = {
+    //                     ...emp,
+    //                     birthDate: emp.birthDate ? new Date(emp.birthDate) : new Date(1990, 1, 1)
+    //                 } as EmployeeResponse;
+    //                 return cleanedDate;
+    //             }
+    //         },
+    //         staleTime: 60 * 1000
+    //     });
+    // };
 
     const handleSearchSubmit = (searchValue: string) => {
         setSearch((prev) => ({
@@ -127,7 +128,6 @@ export const useEmployeeList = () => {
         search,
         isFetching,
         handleSearchSubmit,
-        handleHover,
         handlePageChange,
         handleSortOrder,
         handleLogout

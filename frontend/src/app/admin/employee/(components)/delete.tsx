@@ -1,41 +1,47 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { notification } from "@/lib/utils";
-import { deleteEmployee } from "@/service/admin/employee.service";
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+
+import { AlertDialog, 
+    AlertDialogAction, 
+    AlertDialogCancel, 
+    AlertDialogContent, 
+    AlertDialogDescription, 
+    AlertDialogFooter, 
+    AlertDialogHeader, 
+    AlertDialogTitle, 
+    AlertDialogTrigger } from "@/components/ui/alert-dialog";
+
+import { deleteEmployee } from "@/service/admin/employee.service";
 
 interface DeleteEmployeeProps {
     employeeId: string | undefined,
+    children: React.ReactNode
 }
 
-function DeleteEmployee({ employeeId }: DeleteEmployeeProps) {
+function DeleteEmployee({ employeeId, children }: DeleteEmployeeProps) {
+
     const queryClient = useQueryClient();
-    const [openAlert, setOpenAlert] = useState(false);
+
     const { mutate, isPending } = useMutation({
         mutationFn: async (employeeId: string) => await deleteEmployee(employeeId),
         onSuccess: (res) => {
             if (res.status === 204) {
-                notification("Deleted employee successfully", "success");
+                toast.success("Deleted employee successfully");
                 queryClient.invalidateQueries({ queryKey: ['employees'] });
             }
         },
         onError: (error) => {
-            notification(error.message);
+            toast.error(error.message);
         }
     })
+
     const handleDelete = async () => mutate(employeeId || "");
+
     return (
         <>
-            <AlertDialog open={openAlert} onOpenChange={setOpenAlert}>
+            <AlertDialog>
                 <AlertDialogTrigger asChild>
-                    <Button
-                        disabled={isPending}
-                        variant="outline"
-                        className="hover:cursor-pointer text-red-500 border-red-300 hover:bg-red-50 hover:text-red-600 hover:border-red-400 text-xs px-3 py-1.5 font-medium transition-all"
-                    >
-                        DELETE
-                    </Button>
+                    {children}
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>

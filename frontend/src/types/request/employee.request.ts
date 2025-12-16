@@ -28,7 +28,9 @@ export const upsertEmployeeSchema = z.object({
         .nullable(),
     note: z.string().trim()
         .nullable()
-        .optional()
+        .optional(),
+    concurrencyStamp: z.string().trim()
+        .min(1, { message: "Required!" })
 });
 
 export type UpsertEmployeeType = z.infer<typeof upsertEmployeeSchema>;

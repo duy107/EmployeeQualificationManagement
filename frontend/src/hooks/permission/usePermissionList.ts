@@ -1,13 +1,15 @@
 "use client"
 
-import { notification } from "@/lib/utils";
-import { getAllByGroup, updatePermission } from "@/service/admin/permission.service";
-import { getAll } from "@/service/admin/role.service";
-import { PermissionGroupResponse, PermissionNodeResponse, RoleResponse, UpdateBulkRoleType } from "@/types";
-import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import { useQueries, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { getAllByGroup, updatePermission } from "@/service/admin/permission.service";
+import { getAll } from "@/service/admin/role.service";
+import { PermissionGroupResponse, PermissionNodeResponse, RoleResponse, UpdateBulkRoleType } from "@/types";
 
 export const usePermissionList = () => {
     const router = useRouter();
@@ -95,10 +97,10 @@ export const usePermissionList = () => {
 
         if (res.status === 204) {
             queryClient.invalidateQueries({ queryKey: ["role", "all"] });
-            return notification("Permission updated successfully!", "success");
+            return toast.success("Permission updated successfully!");
         }
 
-        notification("Error, Try again!");
+        toast.error("Something went wrong. Please try again.");
     }
 
     const handleToggleCheckox = (roleId: string, permissionName: string, isChecked: boolean) => {

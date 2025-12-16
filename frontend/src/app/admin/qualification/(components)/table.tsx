@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui";
 import { EmployeeQualificationResponse } from "@/types";
-import QualificationTableRow from "./tableRow";
+import QualificationTableRow from "./table-row";
 
 interface QualificationTableProps {
     qualifications: EmployeeQualificationResponse[],

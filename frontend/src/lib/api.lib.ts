@@ -45,7 +45,7 @@ api.interceptors.request.use(async (config) => {
 
     // handle api from openapi
     if (apiOpenId.some(p => p.startsWith(path))) {
-        // replace: "Content-Type" : "application/json"
+        // replace: "Content-Type" : "application/json" => "application/x-www-form-urlencoded"
         config.headers["Content-Type"] = "application/x-www-form-urlencoded";
 
         if (config.data) {
@@ -70,7 +70,7 @@ api.interceptors.response.use(
         if (axios.isAxiosError(error) && error.response) {
 
             const { status, data } = error.response;
-            const message = (data as any)?.message || error.message;
+            const message = data?.error?.message;
 
             if (status === 401) {
                 if (typeof window == "undefined") {
@@ -78,10 +78,10 @@ api.interceptors.response.use(
                 } else {
                     redirect("/login");
                 }
-                return Promise.reject(new Error("UNAUTHENTICATED"));
+                return Promise.reject(new Error(message || "UNAUTHENTICATED"));
             }
             if (status === 403) {
-                return Promise.reject(new Error("UNAUTHORIZED"));
+                return Promise.reject(new Error(message || "UNAUTHORIZED"));
             }
             return Promise.reject(new Error(message));
         }

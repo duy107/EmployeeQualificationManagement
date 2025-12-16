@@ -1,11 +1,16 @@
-'use client";'
-import { roboto } from "@/lib/font.lib";
+"use client"
+
 import React from "react";
-import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { Toaster } from "@/components/ui/sonner";
 import QueryProvider from "@/context/queryClientProvider";
+
+import { roboto } from "@/lib/font.lib";
+
+import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -18,7 +23,12 @@ export default function RootLayout({
             >
                 <QueryProvider>
                     <SessionProvider>
-                        <ToastContainer position="top-right" autoClose={3000} />
+                        <Toaster
+                            duration={2000}
+                            position="bottom-right"
+                            richColors
+                            closeButton
+                        />
                         {children}
                     </SessionProvider>
                 </QueryProvider>

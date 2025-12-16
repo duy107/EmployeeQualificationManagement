@@ -1,11 +1,13 @@
 'use client';
 
-import { useEmployeeUpsert } from '@/hooks/employee/useEmployeeUpsert';
-import { Loader2 } from 'lucide-react';
-import UpsertForm from '../(components)/upsertForm';
-import QualificationForm from '../(components)/quanlificationTable';
-import { cn } from '@/lib/utils';
 import { useWatch } from 'react-hook-form';
+
+import UpsertForm from '../(components)/upsert-form';
+import FullscreenLoader from '@/components/fullscreen-loader';
+import QualificationForm from '../(components)/quanlification-table';
+
+import { cn } from '@/lib/utils';
+import { useEmployeeUpsert } from '@/hooks/employee/useEmployeeUpsert';
 
 export default function UpsetEmployee() {
 
@@ -23,13 +25,8 @@ export default function UpsetEmployee() {
   });
 
   if (isQueryLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="w-4 h-4 animate-spin" />  Đang tải...
-      </div>
-    );
+    return <FullscreenLoader />
   }
-
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center bg-gray-50 overflow-hidden">

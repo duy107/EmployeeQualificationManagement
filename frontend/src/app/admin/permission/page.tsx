@@ -1,10 +1,14 @@
 "use client"
 
-import { Button } from "@/components/ui";
-import { usePermissionList } from "@/hooks/permission/usePermissionList";
-import { Loader2, Save } from "lucide-react";
 import Link from "next/link";
+
+import { Save } from "lucide-react";
+
+import { Button } from "@/components/ui";
 import PermissionTable from "./(components)/table";
+import FullscreenLoader from "@/components/fullscreen-loader";
+
+import { usePermissionList } from "@/hooks/permission/usePermissionList";
 
 function PermissionPage() {
 
@@ -18,11 +22,7 @@ function PermissionPage() {
     } = usePermissionList();
 
     if (isLoading || hasError) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <Loader2 className="w-4 h-4 animate-spin" />  Đang tải...
-            </div>
-        );
+        return <FullscreenLoader />
     }
 
     return (

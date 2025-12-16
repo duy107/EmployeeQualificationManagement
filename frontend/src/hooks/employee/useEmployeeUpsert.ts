@@ -1,14 +1,17 @@
 "use client"
 
-import { notification, removeEmptyStrings } from "@/lib/utils";
-import { createEmployee, getById, updateEmployee } from "@/service/admin/employee.service";
-import { EmployeeResponse, upsertEmployeeSchema, UpsertEmployeeType } from "@/types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { setHours } from "date-fns";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+
+import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { setHours } from "date-fns";
+
+import { removeEmptyStrings } from "@/lib/utils";
+import { createEmployee, getById, updateEmployee } from "@/service/admin/employee.service";
+import { EmployeeResponse, upsertEmployeeSchema, UpsertEmployeeType } from "@/types";
 
 export const useEmployeeUpsert = () => {
 
@@ -34,11 +37,12 @@ export const useEmployeeUpsert = () => {
             }
         },
         onError: (error) => {
-            notification(error.message);
+            toast.error(error.message);
         }
     });
 
     const queryClient = useQueryClient();
+
     const { data: employeeData, isLoading: isQueryLoading } = useQuery({
         queryKey: ["employee", id],
         queryFn: async () => {

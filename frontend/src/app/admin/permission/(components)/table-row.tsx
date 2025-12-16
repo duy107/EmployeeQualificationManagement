@@ -1,14 +1,26 @@
 "use client"
-import { Input, TableCell, TableRow } from "@/components/ui";
-import { PermissionNodeResponse, RoleResponse } from "@/types";
+
 import { JSX } from "react";
 
-export const permissionTableRow = (
-    permissions: PermissionNodeResponse[] = [],
-    roles: RoleResponse[] = [],
+import { Input, TableCell, TableRow } from "@/components/ui";
+
+import { PermissionNodeResponse, RoleResponse } from "@/types";
+
+interface PermissionTableRowProps {
+    permissions: PermissionNodeResponse[],
+    roles: RoleResponse[],
     colSpan: number,
     level: number,
     handleToggleCheckox: (roleId: string, permissionName: string, isChecked: boolean) => void
+}
+
+export const PermissionTableRow = (
+    { permissions,
+        roles,
+        colSpan,
+        level,
+        handleToggleCheckox
+    }: PermissionTableRowProps
 ) => {
 
     return permissions.flatMap(perm => {
@@ -62,8 +74,17 @@ export const permissionTableRow = (
         );
 
         const childrenRows: JSX.Element[] = hasChildren
-            ? permissionTableRow(perm.children || [], roles, colSpan, level + 1, handleToggleCheckox)
+            ? PermissionTableRow(
+                {
+                    permissions: perm.children || [],
+                    roles: roles,
+                    colSpan: colSpan,
+                    level: level + 1,
+                    handleToggleCheckox: handleToggleCheckox
+                }
+            )
             : [];
+
         return [currentRow, ...childrenRows];
     });
 }

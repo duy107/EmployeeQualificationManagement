@@ -1,15 +1,13 @@
 "use client"
 
-import QualificationTable from "@/app/admin/qualification/(components)/table";
 import { Button } from "@/components/ui";
 import Pagination from "@/components/ui/pagination";
+
+import AddQualificationModal from "./add-qualification";
 import { useQualificationList } from "@/hooks/qualification/useQualificationList";
-import { useState } from "react";
-import AddQualificationModal from "../(components)/addQualification";
+import QualificationTable from "@/app/admin/qualification/(components)/table";
 
 function QualificationForm({ employeeId }: { employeeId: string }) {
-
-    const [open, setOpen] = useState(false);
 
     const {
         qualifications,
@@ -24,11 +22,12 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
                 <h2 className="text-lg font-semibold text-teal-600">
                     Qualifications
                 </h2>
-                <Button
-                    onClick={() => setOpen(true)}
-                    className="bg-teal-400 hover:bg-teal-500 text-white">
-                    ADD
-                </Button>
+                <AddQualificationModal employeeId={employeeId}>
+                    <Button
+                        className="bg-teal-400 hover:bg-teal-500 text-white">
+                        ADD
+                    </Button>
+                </AddQualificationModal>
             </div>
 
             <div className="border rounded-lg max-h-[400px] overflow-y-auto">
@@ -40,14 +39,12 @@ function QualificationForm({ employeeId }: { employeeId: string }) {
             </div>
 
             {/* pagination */}
-            <Pagination currentPage={qualificationOptions.pageNumber} limitPerPage={qualificationOptions.pageSize} totalItems={totalQualification} onPageChange={handlePageChange} />
-
-            {/* add qualification */}
-            {employeeId && <AddQualificationModal
-                open={open}
-                onClose={() => setOpen(false)}
-                employeeId={employeeId}
-            />}
+            <Pagination
+                currentPage={qualificationOptions.pageNumber}
+                limitPerPage={qualificationOptions.pageSize}
+                totalItems={totalQualification}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 }

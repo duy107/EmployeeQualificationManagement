@@ -1,15 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toast } from "react-toastify";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
-}
-
-export const notification = (mess: string, type: "error" | "success" = "error") => {
-  toast[type](mess, {
-    theme: "colored"
-  });
 }
 
 export const removeEmptyStrings = (obj: Record<string, unknown>): Record<string, unknown> => {
@@ -21,7 +14,6 @@ export const removeEmptyStrings = (obj: Record<string, unknown>): Record<string,
   return obj;
 };
 
-
 export const checkDate = (validFrom: Date | string | null, validTo: Date | string | null) => {
 
   const from = validFrom && new Date(validFrom);
@@ -29,6 +21,7 @@ export const checkDate = (validFrom: Date | string | null, validTo: Date | strin
   const today = new Date();
 
   let isValid = false;
+  
   if (from && to) {
     if (from.getTime() === to.getTime()) {
       isValid = true;
@@ -41,5 +34,6 @@ export const checkDate = (validFrom: Date | string | null, validTo: Date | strin
   } else {
     isValid = false;
   }
+
   return isValid;
 }

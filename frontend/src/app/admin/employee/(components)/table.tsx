@@ -1,24 +1,28 @@
+import { LoaderIcon, Search } from "lucide-react";
+
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui";
 import { EmployeePaginatedRequest, EmployeeResponse } from "@/types";
-import { Loader2, Search } from "lucide-react";
-import EmployeeTableRow from "./tableRow";
+import EmployeeTableRow from "./table-row";
 
 interface EmployeeTableProps {
     employees: EmployeeResponse[],
     searchParams: EmployeePaginatedRequest,
     isFetching: boolean,
     handleSortOrder: (sortName: string, sortValue: "desc" | "asc") => void,
-    prefetchEmployee: (employeeId: string) => void
+    // prefetchEmployee: (employeeId: string) => void
 }
 
-function EmployeeTable({ employees, searchParams, isFetching, handleSortOrder, prefetchEmployee }: EmployeeTableProps) {
+function EmployeeTable({ employees, searchParams, isFetching, handleSortOrder }: EmployeeTableProps) {
 
-    if (isFetching && employees.length === 0) {
+    if (isFetching) {
         return (
-            <div className="py-10 text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-cyan-500 mx-auto" />
+            <div className="text-center py-20">
+                <div className="flex items-center justify-center py-4">
+                    <LoaderIcon className="size-5 text-sm animate-spin" />
+                    <p className="text-sm ml-2">Loading data....</p>
+                </div>
             </div>
-        );
+        )
     }
 
     if (!isFetching && employees.length === 0) {
@@ -70,18 +74,16 @@ function EmployeeTable({ employees, searchParams, isFetching, handleSortOrder, p
                     </TableHeader>
 
                     <TableBody className="divide-y divide-gray-200">
-                        {
-                            employees.map((employee, index) => (
+                            {employees.map((employee, index) => (
                                 <EmployeeTableRow
                                     key={index}
                                     employee={employee}
                                     index={index}
                                     pageNumber={searchParams.pageNumber}
                                     pageSize={searchParams.pageSize}
-                                    prefetchEmployee={prefetchEmployee}
+                                // prefetchEmployee={prefetchEmployee}
                                 />
-                            ))
-                        }
+                            ))}
                     </TableBody>
                 </Table>
             </div>

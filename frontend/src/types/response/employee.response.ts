@@ -10,5 +10,6 @@ export type EmployeeResponse = {
     email: string
     gender?: 'Male' | 'Female' | null,
     birthDate: Date,
-    note?: string | null
+    note?: string | null,
+    concurrencyStamp: string
 }

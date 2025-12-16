@@ -1,11 +1,14 @@
 "use client"
 
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/ui/pagination";
-import { useEmployeeList } from "@/hooks/employee/useEmployeeList";
-import Link from "next/link";
-import EmployeeSearchBar from "./(components)/searchBar";
 import EmployeeTable from "./(components)/table";
+import EmployeeSearchBar from "./(components)/search-input";
+
+import { useEmployeeList } from "@/hooks/employee/useEmployeeList";
+
 
 function Employees() {
     
@@ -14,7 +17,6 @@ function Employees() {
         isFetching,
         search,
         totalItems,
-        handleHover,
         handlePageChange,
         handleSearchSubmit,
         handleSortOrder,
@@ -50,7 +52,7 @@ function Employees() {
                         employees={employees}
                         handleSortOrder={handleSortOrder}
                         isFetching={isFetching}
-                        prefetchEmployee={handleHover}
+                        // prefetchEmployee={handleHover}
                         searchParams={search}
                     />
                 </div>

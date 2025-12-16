@@ -1,8 +1,7 @@
-import { notification } from "@/lib/utils";
 import { getAll } from "@/service/admin/qualification.service";
 import { QualificationResponse } from "@/types";
+import { toast } from "sonner";
 import { create } from "zustand";
-
 
 interface QualificationStore {
   qualifications: QualificationResponse[];
@@ -22,10 +21,10 @@ export const useQualificationStore = create<QualificationStore>((set, get) => ({
       if (res.status === 200) {
         set({ qualifications: res.data.items || [] });
       } else {
-        notification("Không lấy được danh sách quyền!");
+        toast.error("Không lấy được danh sách quyền!");
       }
     } catch (err) {
-      notification(err as string);
+      toast.error(err as string);
     } finally {
       set({ loading: false });
     }
